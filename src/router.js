@@ -52,6 +52,10 @@ export default new Router({
         {
           path: 'my-used-tickets',
           component: () => import('@/components/tickets/TicketsUsed')
+        },
+        {
+          path: 'create',
+          component: () => import('@/components/tickets/TicketsCreate')
         }
       ]
     },
@@ -87,11 +91,11 @@ export default new Router({
       [
         {
           path: 'list',
-          component: () => import('@/components/tickets/TicketsList')
+          component: () => import('@/components/posts/PostsList')
         },
         {
-          path: 'add',
-          component: () => import('@/components/tickets/TicketsEdit')
+          path: 'create',
+          component: () => import('@/components/posts/PostsCreate')
         }
       ]
     },

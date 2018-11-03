@@ -9,16 +9,16 @@
     <div class="ui-bordered px-4 pt-4 mb-4">
       <div class="form-row align-items-center">
         <div class="col-md mb-4">
-          <label class="form-label">Priority</label>
-          <b-select v-model="filterPriority" :options="['Any', 'High', 'Medium', 'Low']" />
+          <label class="form-label">From</label>
+          <b-select v-model="filterFrom" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
         </div>
         <div class="col-md mb-4">
-          <label class="form-label">Status</label>
-          <b-select v-model="filterStatus" :options="['Any', 'Open', 'Reopened', 'In progress', 'Closed']" />
+          <label class="form-label">To</label>
+          <b-select v-model="filterTo" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
         </div>
         <div class="col-md mb-4">
-          <label class="form-label">Created date</label>
-          <flat-pickr v-model="filterCreatedDate" :config="{ altInput: true, animate: !isRTL, dateFormat: 'm/d/Y', altFormat: 'm/d/Y', mode: 'single' }" :placeholder="!isIEMode ? 'Select a date' : null" />
+          <label class="form-label">Departure date</label>
+          <flat-pickr v-model="filterDepartureDate" :config="{ altInput: true, animate: !isRTL, dateFormat: 'm/d/Y', altFormat: 'm/d/Y', mode: 'single' }" :placeholder="!isIEMode ? 'Select a date' : null" />
         </div>
         <div class="col-md col-xl-2 mb-4">
           <label class="form-label d-none d-md-block">&nbsp;</label>
@@ -158,9 +158,9 @@ export default {
     ],
 
     // Filters
-    filterPriority: 'Any',
-    filterStatus: 'Any',
-    filterCreatedDate: null,
+    filterFrom: 'Any',
+    filterTo: 'Any',
+    filterDepartureDate: null,
 
     ticketsData: [],
     originalTicketsData: [],
