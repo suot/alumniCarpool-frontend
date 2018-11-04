@@ -141,7 +141,7 @@ export default {
   },
   data: () => ({
     // Options
-    dataUrl: 'json/pages_tickets_list.json',
+    dataUrl: 'to be modified',
     searchKeys: ['id', 'subject'],
     sortBy: 'id',
     sortDesc: false,
@@ -204,7 +204,7 @@ export default {
 
   created () {
     const req = new XMLHttpRequest()
-    req.open('GET', `${this.baseUrl}${this.dataUrl}`)
+    req.open('GET', this.dataUrl)
 
     req.onload = () => {
       const data = JSON.parse(req.response)
