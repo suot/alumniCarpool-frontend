@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <div class="layout-overlay" @click="closeSidenav"></div>
+    <!-- <div class="layout-overlay" @click="closeSidenav"></div> -->
   </div>
 </template>
 
@@ -32,20 +32,20 @@ export default {
     'app-layout-footer': LayoutFooter
   },
 
-  mounted () {
-    this.layoutHelpers.init()
-    this.layoutHelpers.update()
-    this.layoutHelpers.setAutoUpdate(true)
-  },
-
-  beforeDestroy () {
-    this.layoutHelpers.destroy()
-  },
-
-  methods: {
-    closeSidenav () {
-      this.layoutHelpers.setCollapsed(true)
-    }
-  }
+  // mounted () {
+  //   this.layoutHelpers.init()
+  //   this.layoutHelpers.update()
+  //   this.layoutHelpers.setAutoUpdate(true)
+  // },
+  //
+  // beforeDestroy () {
+  //   this.layoutHelpers.destroy()
+  // },
+  //
+  // methods: {
+  //   closeSidenav () {
+  //     this.layoutHelpers.setCollapsed(true)
+  //   }
+  // }
 }
 </script>

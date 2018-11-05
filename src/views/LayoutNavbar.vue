@@ -154,13 +154,13 @@
           <template slot="button-content">
             <span class="d-inline-flex flex-lg-row-reverse align-items-center align-middle">
               <img :src="`${baseUrl}img/avatars/1.png`" alt class="d-block ui-w-30 rounded-circle">
-              <span class="px-1 mr-lg-2 ml-2 ml-lg-0">Mike Greene</span>
+              <span class="px-1 mr-lg-2 ml-2 ml-lg-0">Suo Tian</span>
             </span>
           </template>
 
-          <b-dd-item><i class="ion ion-ios-person text-lightest"></i> &nbsp; My profile</b-dd-item>
+          <b-dd-item><router-link to="/users/view"><i class="ion ion-ios-person text-lightest"></i> &nbsp; My profile</router-link></b-dd-item>
           <b-dd-item><i class="ion ion-ios-mail text-lightest"></i> &nbsp; Messages</b-dd-item>
-          <b-dd-item><i class="ion ion-md-settings text-lightest"></i> &nbsp; Account settings</b-dd-item>
+          <b-dd-item><router-link to="/users/account-settings"><i class="ion ion-md-settings text-lightest"></i> &nbsp; Account settings</router-link></b-dd-item>
           <b-dd-divider />
           <b-dd-item><i class="ion ion-ios-log-out text-danger"></i> &nbsp; Log Out</b-dd-item>
         </b-nav-item-dropdown>

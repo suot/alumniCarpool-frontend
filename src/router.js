@@ -69,10 +69,10 @@ export default new Router({
           path: 'view',
           component: () => import('@/components/users/UsersView')
         },
-        {
-          path: 'edit',
-          component: () => import('@/components/users/UsersEdit')
-        },
+        // {
+        //   path: 'edit',
+        //   component: () => import('@/components/users/UsersEdit')
+        // },
         {
           path: 'account-settings',
           component: () => import('@/components/users/AccountSettings')

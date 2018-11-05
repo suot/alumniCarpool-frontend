@@ -73,8 +73,8 @@
         </div>
         <!-- / Header -->
 
-        <!-- <b-form-group label="Subject">
-          <b-input v-model="ticketData.subject" />
+        <!-- <b-form-group label="departureCity">
+          <b-input v-model="ticketData.departureCity" />
         </b-form-group> -->
 
       </b-card-body>
@@ -88,8 +88,8 @@
         <div class="form-row">
           <!-- <div class="col-sm-6">
 
-            <b-form-group label="Priority">
-              <b-select v-model="ticketData.priority" :options="{1: 'High', 2: 'Medium', 3: 'Low'}" />
+            <b-form-group label="arrivalLocation">
+              <b-select v-model="ticketData.arrivalLocation" :options="{1: 'High', 2: 'Medium', 3: 'Low'}" />
             </b-form-group>
 
           </div> -->
@@ -122,7 +122,7 @@
 
 
         <div class="col-md mb-4">
-      <b-form-group label="Start/Address">
+      <b-form-group label="From/Location">
         <b-input v-model="ticketData.startaddress" rows="1" />
       </b-form-group>
 
@@ -142,7 +142,7 @@
 
   </div>
 <div class="col-md mb-4">
-    <b-form-group label="End/Address">
+    <b-form-group label="To/Location">
       <b-input v-model="ticketData.endaddress" rows="1" />
     </b-form-group>
 </div>
@@ -276,12 +276,12 @@ export default {
       date:'2018/9/10',
       time:'9:00am',
       plateNum:'BYAK369',
-      subject: 'esse velit enim elit dolor magna est laboris',
+      departureCity: 'esse velit enim elit dolor magna est laboris',
       description: 'Ticket description',
-      priority: 1,
+      arrivalLocation: 1,
       status: 3,
       filterDepartureDate: null,
-      tags: ['Feature', 'High priority'],
+      tags: ['Feature', 'High arrivalLocation'],
       passengers: [
         { avatar: '9-small.png', name: 'Amanda Warner',seat:': front'},
         { avatar: '2-small.png', name: 'Leon Wilson' ,seat:': back side'},

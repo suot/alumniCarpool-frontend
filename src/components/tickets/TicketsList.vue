@@ -2,27 +2,27 @@
   <div>
     <h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
       <div>Tickets</div>
-      <b-btn variant="primary btn-round" class="d-block"><span class="ion ion-md-add"></span>&nbsp; Create ticket</b-btn>
+      <router-link to="/tickets/create"><b-btn variant="primary" class="d-block"><span class="ion ion-md-add"></span>&nbsp; Create Ticket</b-btn></router-link>
     </h4>
 
     <!-- Filters -->
     <div class="ui-bordered px-4 pt-4 mb-4">
       <div class="form-row align-items-center">
         <div class="col-md mb-4">
-          <label class="form-label">From</label>
+          <label class="form-label">Departure City</label>
           <b-select v-model="filterFrom" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
         </div>
         <div class="col-md mb-4">
-          <label class="form-label">To</label>
+          <label class="form-label">Arrival City</label>
           <b-select v-model="filterTo" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
         </div>
         <div class="col-md mb-4">
-          <label class="form-label">Departure date</label>
+          <label class="form-label">Departure Date</label>
           <flat-pickr v-model="filterDepartureDate" :config="{ altInput: true, animate: !isRTL, dateFormat: 'm/d/Y', altFormat: 'm/d/Y', mode: 'single' }" :placeholder="!isIEMode ? 'Select a date' : null" />
         </div>
         <div class="col-md col-xl-2 mb-4">
           <label class="form-label d-none d-md-block">&nbsp;</label>
-          <b-btn variant="secondary" :block="true">Show</b-btn>
+          <b-btn variant="primary" :block="true" @click="show(filterFrom, filterTo, filterDepartureDate)">Show</b-btn>
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
 
         <div class="row">
           <div class="col">
-            Per page: &nbsp;
+            Per Page: &nbsp;
             <b-select size="sm" v-model="perPage" :options="[10, 20, 30, 40, 50]" class="d-inline-block w-auto" />
           </div>
           <div class="col">
@@ -61,37 +61,24 @@
           :per-page="perPage"
           class="card-table">
 
-          <template slot="priority" slot-scope="data">
-            <b-dropdown :variant="priorityDropdownVariant(data.item.priority)" :right="isRTL">
-              <template slot="button-content">
-                <span v-if="data.item.priority === 1">High</span>
-                <span v-if="data.item.priority === 2">Medium</span>
-                <span v-if="data.item.priority === 3">Low</span>
-              </template>
-              <b-dropdown-item href="javascript:void(0)" :active="data.item.priority === 1">High</b-dropdown-item>
-              <b-dropdown-item href="javascript:void(0)" :active="data.item.priority === 2">Medium</b-dropdown-item>
-              <b-dropdown-item href="javascript:void(0)" :active="data.item.priority === 3">Low</b-dropdown-item>
-            </b-dropdown>
+          <template slot="seats" slot-scope="data">
+            <!-- <b-btn v-for="seat in seats" variant="default btn-xs icon-btn md-btn-flat" v-b-tooltip.hover title="Occupy" @click.stop="occupySeat()"><i class="ion ion-md-person-add"></i></b-btn> -->
+
+            <div v-for="(seat, i) in seats" :key="i" class="ui-feed-icon-container d-inline-block mr-1 mb-1">
+              <a @click.prevent="seats.splice(i, 1)" href="#" class="ui-icon ui-feed-icon ion ion-ios-close bg-secondary text-white"></a>
+              <img :src="`${baseUrl}img/avatars/1.png`" v-b-tooltip.hover :title="seat" class="ticket-assignee d-block ui-w-30 rounded-circle">
+            </div>
+
+            <!-- <a href="javascript:void(0)" class="ticket-assignee-add bg-lighter text-muted mb-3">
+              <span class="ion ion-md-add"></span>
+            </a> -->
+
           </template>
 
-          <template slot="status" slot-scope="data">
-            <b-dropdown variant="outline-secondary btn-xs md-btn-flat" :right="isRTL">
-              <template slot="button-content">
-                <span v-if="data.item.status === 1">Open</span>
-                <span v-if="data.item.status === 2">Reopened</span>
-                <span v-if="data.item.status === 3">In progress</span>
-                <span v-if="data.item.status === 4">Closed</span>
-              </template>
-              <b-dropdown-item href="javascript:void(0)" :active="data.item.status === 1">Open</b-dropdown-item>
-              <b-dropdown-item href="javascript:void(0)" :active="data.item.status === 2">Reopened</b-dropdown-item>
-              <b-dropdown-item href="javascript:void(0)" :active="data.item.status === 3">In progress</b-dropdown-item>
-              <b-dropdown-item href="javascript:void(0)" :active="data.item.status === 4">Closed</b-dropdown-item>
-            </b-dropdown>
-          </template>
-
-          <template slot="actions" slot-scope="data">
-            <b-btn variant="default btn-xs icon-btn md-btn-flat" v-b-tooltip.hover title="Edit"><i class="ion ion-md-create"></i></b-btn>
-            <b-btn variant="default btn-xs icon-btn md-btn-flat" v-b-tooltip.hover title="Remove"><i class="ion ion-md-close"></i></b-btn>
+          <template slot="action" slot-scope="data">
+            <b-btn variant="outline-success btn-xs icon-btn md-btn-flat" v-b-tooltip.hover title="Depart" @click.stop="startJourney(data.item)"><i class="ion ion-md-paper-plane"></i></b-btn>
+            &nbsp;
+            <b-btn variant="outline-warning btn-xs icon-btn md-btn-flat" v-b-tooltip.hover title="Delete" @click.stop="deleteTicket(data.item)"><i class="ion ion-md-trash"></i></b-btn>
           </template>
         </b-table>
 
@@ -123,38 +110,39 @@
 
 <style src="@/vendor/libs/vue-flatpickr-component/vue-flatpickr-component.scss" lang="scss"></style>
 
-
 <script>
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css';
 import 'flatpickr/dist/themes/material_blue.css';
 
 
-
 export default {
-  name: 'pages-ticket-list',
+  name: 'ticket-list',
   metaInfo: {
-    title: 'Ticket list - Pages'
+    title: 'Ticket list'
   },
   components: {
     flatPickr
   },
   data: () => ({
     // Options
-    dataUrl: 'json/pages_tickets_list.json',
-    searchKeys: ['id', 'subject'],
+    dataUrl: 'http://localhost:1010/orders',
+    searchKeys: ['id'],
     sortBy: 'id',
     sortDesc: false,
     perPage: 10,
 
     fields: [
       { key: 'id', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
-      { key: 'subject', sortable: true, thClass: 'text-nowrap', thStyle: 'min-width: 300px', tdClass: 'align-middle py-3' },
-      { key: 'created_at', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
-      { key: 'last_update', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
-      { key: 'priority', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
+      //{ key: 'departureCity', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
+      { key: 'departureLocation', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
+      //{ key: 'arrivalCity', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
+      { key: 'arrivalLocation', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
+      //{ key: 'departureDate', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
+      { key: 'departureTime', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
       { key: 'status', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
-      { key: 'actions', label: ' ', thClass: 'text-nowrap', tdClass: 'text-nowrap align-middle text-center py-3' }
+      { key: 'seats', label: 'Seats', thClass: 'text-nowrap', tdClass: 'text-nowrap align-middle text-center py-3' },
+      { key: 'action', label: 'Action', thClass: 'text-nowrap', tdClass: 'text-nowrap align-middle text-center py-3' }
     ],
 
     // Filters
@@ -165,7 +153,9 @@ export default {
     ticketsData: [],
     originalTicketsData: [],
 
-    currentPage: 1
+    currentPage: 1,
+
+    seats: ["a", "b", "c"]
   }),
 
   computed: {
@@ -191,28 +181,31 @@ export default {
       this.ticketsData = filtered
     },
 
-    priorityDropdownVariant (priority) {
-      let variant
+    occupySeat(){
+      this.$emit('show', this.filterFrom, this.filterTo, this.filterDepartureDate);
+    },
 
-      if (priority === 1) variant = 'danger'
-      if (priority === 2) variant = 'success'
-      if (priority === 3) variant = 'warning'
+    startJourney(row){
+      console.log("row: " + row.id);
+      //this.$emit('show', this.filterFrom, this.filterTo, this.filterDepartureDate);
+    },
 
-      return `${variant} btn-xs md-btn-flat`
+    deleteTicket(row){
+      this.$http.delete(this.dataUrl+'/delete/'+row.id).then();
+      //this.$emit('show', this.filterFrom, this.filterTo, this.filterDepartureDate);
+    },
+
+    show(from, to, date){
+      let url =  this.dataUrl+'/get/allOngoing?departureCity='+ from + '&arrivalCity='+to+'&departureDate='+date;
+      const req = new XMLHttpRequest()
+      req.open('GET', url)
+      req.onload = () => {
+        const data = JSON.parse(req.response)
+        this.ticketsData = data
+        this.originalTicketsData = data.slice(0)
+      }
+      req.send()
     }
-  },
-
-  created () {
-    const req = new XMLHttpRequest()
-    req.open('GET', `${this.baseUrl}${this.dataUrl}`)
-
-    req.onload = () => {
-      const data = JSON.parse(req.response)
-      this.ticketsData = data
-      this.originalTicketsData = data.slice(0)
-    }
-
-    req.send()
   }
 }
 </script>
