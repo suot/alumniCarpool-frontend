@@ -182,17 +182,33 @@ export default {
     },
 
     occupySeat(){
-      this.$emit('show', this.filterFrom, this.filterTo, this.filterDepartureDate);
+
+
     },
 
     startJourney(row){
-      console.log("row: " + row.id);
-      //this.$emit('show', this.filterFrom, this.filterTo, this.filterDepartureDate);
+      row.status = "On-board";
+      let url = this.dataUrl+'/update/'+ row.id;
+      this.$http.put(url, row).then(response => {
+        //notification
+
+        //redirect
+        //this.$router.push('/tickets/list');
+      }, response => {
+        //error callback, notification
+      });
+
     },
 
     deleteTicket(row){
-      this.$http.delete(this.dataUrl+'/delete/'+row.id).then();
-      //this.$emit('show', this.filterFrom, this.filterTo, this.filterDepartureDate);
+      this.$http.delete(this.dataUrl+'/delete/'+row.id).then(response => {
+        //notification
+
+        //delete the data in table
+      }, response => {
+        //error callback, notification
+      });
+
     },
 
     show(from, to, date){

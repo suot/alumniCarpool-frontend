@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "numeral": "^2.0.6",
     "perfect-scrollbar": "^1.4.0",
     "vue": "^2.5.17",

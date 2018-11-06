@@ -20,18 +20,18 @@ export default new Router({
         {
           path: 'login',
           // component: AuthenticationLoginV2
-          component: () => import('@/components/home/AuthenticationLoginV2')
+          component: () => import('@/components/home/Login')
         },
         {
           path: 'register',
-          component: () => import('@/components/home/AuthenticationRegisterV2')
+          component: () => import('@/components/home/Register')
         },
         {
           path: 'password-reset',
-          component: () => import('@/components/home/AuthenticationPasswordReset')
+          component: () => import('@/components/home/PasswordReset')
         }, {
           path: 'email-confirm',
-          component: () => import('@/components/home/AuthenticationEmailConfirm')
+          component: () => import('@/components/home/EmailConfirm')
         }
       ]
     },

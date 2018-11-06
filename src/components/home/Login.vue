@@ -33,7 +33,7 @@
 
             <div class="d-flex justify-content-between align-items-center m-0">
               <b-check v-model="credentials.rememberMe" class="m-0">Remember me</b-check>
-              <b-btn variant="primary">Sign In</b-btn>
+              <b-btn variant="primary">Sign In</b-btn>  
             </div>
           </form>
           <!-- / Form -->
@@ -41,7 +41,7 @@
         </div>
         <b-card-footer class="py-3 px-4 px-sm-5">
           <div class="text-center text-muted">
-            Don't have an account yet? <a href="javascript:void(0)">Sign Up</a>
+            Don't have an account yet? <router-link to="/register">Sign Up</router-link>
           </div>
         </b-card-footer>
       </b-card>

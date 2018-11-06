@@ -65,12 +65,9 @@
 
 
 <script>
-// import Multiselect from 'vue-multiselect'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css';
 import 'flatpickr/dist/themes/material_blue.css';
-
-
 
 
 export default {
@@ -84,7 +81,7 @@ export default {
   },
 
   data: () => ({
-    dataUrl: 'http://localhost:1010/orders/create',
+    dataUrl: 'http://localhost:1010/orders',
 
     order: {
       driver: {},
@@ -96,14 +93,13 @@ export default {
 	    departureDate: "",
 	    departureTime: "",
       creatingTime: new Date().toUTCString()
-    }
+    },
+
   }),
 
   methods: {
     createTicket(){
-
-
-      this.$http.post(this.dataUrl, this.order).then(response => {
+      this.$http.post(this.dataUrl+"/create", this.order).then(response => {
         //notification
 
         //redirect

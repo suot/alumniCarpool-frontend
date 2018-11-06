@@ -20,16 +20,19 @@
 
           <!-- Form -->
           <form>
-            <b-form-group label="Your name">
-              <b-input v-model="credentials.name" />
+            <b-form-group label="Your first name">
+              <b-input v-model="user.firstName" />
+            </b-form-group>
+            <b-form-group label="Your last name">
+              <b-input v-model="user.lastName" />
             </b-form-group>
             <b-form-group label="Your email">
-              <b-input v-model="credentials.email" />
+              <b-input v-model="user.email" />
             </b-form-group>
             <b-form-group label="Password">
-              <b-input type="password" v-model="credentials.password" />
+              <b-input type="password" v-model="user.password" />
             </b-form-group>
-            <b-btn variant="primary" :block="true" class="mt-4">Sign Up</b-btn>
+            <b-btn variant="primary" class="mt-4" @click="createUser()">Sign Up</b-btn>
             <div class="text-light small mt-4">
               By clicking "Sign Up", you agree to our
               <a href="javascript:void(0)">terms of service and privacy policy</a>.
@@ -41,7 +44,7 @@
         </div>
         <b-card-footer class="py-3 px-4 px-sm-5">
           <div class="text-center text-muted">
-            Already have an account? <a href="javascript:void(0)">Sign In</a>
+            Already have an account? <router-link to="/login">Sign In</router-link>
           </div>
         </b-card-footer>
       </b-card>
@@ -55,16 +58,35 @@
 
 <script>
 export default {
-  name: 'pages-authentication-register-v2',
+  name: 'register',
   metaInfo: {
-    title: 'Register v2 - Pages'
+    title: 'Register'
   },
   data: () => ({
-    credentials: {
-      name: '',
+    dataUrl: 'http://localhost:1010/users',
+
+    user: {
+      firstName: '',
+      lastName: '',
       email: '',
       password: ''
     }
-  })
+
+  }),
+  methods: {
+    createUser(){
+      this.$http.post(this.dataUrl+"/create", this.user).then(
+        response => {
+          //notification
+
+          console.log("user is created");
+          //redirect
+          this.$router.push('/login');
+        }, response => {
+        // error callback, notification
+          console.log("user creation fails");
+      });
+    }
+  }
 }
 </script>

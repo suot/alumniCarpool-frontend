@@ -6,6 +6,7 @@ import BootstrapVue from 'bootstrap-vue'
 import VueResource from 'vue-resource'
 
 
+
 import globals from './globals'
 
 Vue.config.productionTip = false
