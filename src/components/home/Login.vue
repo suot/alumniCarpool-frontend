@@ -33,7 +33,7 @@
 
             <div class="d-flex justify-content-between align-items-center m-0">
               <b-check v-model="credentials.rememberMe" class="m-0">Remember me</b-check>
-              <b-btn variant="primary">Sign In</b-btn>  
+              <b-btn variant="primary" @click="checkCredentials()">Sign In</b-btn>
             </div>
           </form>
           <!-- / Form -->
@@ -55,16 +55,59 @@
 
 <script>
 export default {
-  name: 'pages-authentication-login-v2',
+  name: 'login',
   metaInfo: {
-    title: 'Login v2 - Pages'
+    title: 'Login'
   },
   data: () => ({
+    dataUrl: 'http://localhost:1010/users',
+
     credentials: {
       email: '',
       password: '',
       rememberMe: false
     }
-  })
+
+  }),
+  methods: {
+    checkCredentials(){
+      let url = this.dataUrl+"/get?email="+this.credentials.email;
+
+      this.$http.get(url).then(
+        response => {
+          const user = response.body;
+          if(user == null){
+            console.log("User does not exist!");
+          }else{
+            //TODO: Get token from Java Spring OAuth2
+
+            //TODO: Vuex.store to store token
+
+            if(this.credentials.password == user.password){
+              //console.log("before: " + this.$store.state.isLoggedIn);
+              this.$store.commit('update_isLoggedIn', true);
+              //console.log("after: " + this.$store.state.isLoggedIn);
+              this.$store.commit('update_userLoggedIn', user);
+              //console.log("id: "+this.$store.state.userLoggedIn.id);
+
+              //redirect
+              this.$router.push('/tickets/list');
+
+            }else{
+              //TODO:notification
+              console.log("Password is wrong!");
+
+            }
+          }
+        }, response => {
+        // error callback, notification
+          console.log("User does not exist!");
+        }
+      );
+
+
+
+    }
+  }
 }
 </script>

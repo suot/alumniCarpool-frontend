@@ -2,7 +2,7 @@
   <div>
     <h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
       <div>Tickets</div>
-      <router-link to="/tickets/create"><b-btn variant="primary" class="d-block"><span class="ion ion-md-add"></span>&nbsp; Create Ticket</b-btn></router-link>
+      <router-link :to="{ name: 'tickets-create'}"><b-btn variant="primary" class="d-block"><span class="ion ion-md-add"></span>&nbsp; Create Ticket</b-btn></router-link>
     </h4>
 
     <!-- Filters -->

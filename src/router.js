@@ -15,11 +15,14 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
+      meta:{
+        requiresVisitor: true,
+      },
       children:
       [
         {
           path: 'login',
-          // component: AuthenticationLoginV2
+          name: 'login',
           component: () => import('@/components/home/Login')
         },
         {
@@ -29,9 +32,15 @@ export default new Router({
         {
           path: 'password-reset',
           component: () => import('@/components/home/PasswordReset')
-        }, {
+        },
+        {
           path: 'email-confirm',
           component: () => import('@/components/home/EmailConfirm')
+        },
+        {
+          path: 'logout',
+          name: 'logout',
+          component: () => import('@/components/home/Login')
         }
       ]
     },
@@ -39,6 +48,9 @@ export default new Router({
       path: '/tickets',
       name: 'tickets',
       component: MainPage,
+      meta:{
+        requiresAuth: true,
+      },
       children:
       [
         {
@@ -46,15 +58,12 @@ export default new Router({
           component: () => import('@/components/tickets/TicketsList')
         },
         {
-          path: 'edit',
-          component: () => import('@/components/tickets/TicketsEdit')
-        },
-        {
           path: 'my-used-tickets',
           component: () => import('@/components/tickets/TicketsUsed')
         },
         {
           path: 'create',
+          name: 'tickets-create',
           component: () => import('@/components/tickets/TicketsCreate')
         }
       ]
@@ -63,16 +72,15 @@ export default new Router({
       path: '/users',
       name: 'users',
       component: MainPage,
+      meta:{
+        requiresAuth: true,
+      },
       children:
       [
         {
           path: 'view',
           component: () => import('@/components/users/UsersView')
         },
-        // {
-        //   path: 'edit',
-        //   component: () => import('@/components/users/UsersEdit')
-        // },
         {
           path: 'account-settings',
           component: () => import('@/components/users/AccountSettings')
@@ -87,6 +95,9 @@ export default new Router({
       path: '/posts',
       name: 'posts',
       component: MainPage,
+      meta:{
+        requiresAuth: true,
+      },
       children:
       [
         {

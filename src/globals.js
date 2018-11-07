@@ -1,5 +1,6 @@
 import themeSettings from '@/vendor/libs/theme-settings/theme-settings.js'
 
+
 export default function () {
   return {
     // Base url
@@ -7,7 +8,6 @@ export default function () {
 
     // Theme settings
     themeSettings,
-
 
     // Check for RTL layout
     get isRTL () {
