@@ -28,7 +28,8 @@ const store = new Vuex.Store({
 
 router.beforeEach((to, from, next) => {
   if(to.matched.some(record => record.meta.requiresAuth)){
-    if(store.state.isLoggedIn){
+    // if(store.state.isLoggedIn){
+    if(true){
       next()
     } else {
       next({

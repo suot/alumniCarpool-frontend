@@ -88,7 +88,6 @@ export default {
               this.$store.commit('update_isLoggedIn', true);
               //console.log("after: " + this.$store.state.isLoggedIn);
               this.$store.commit('update_userLoggedIn', user);
-              //console.log("id: "+this.$store.state.userLoggedIn.id);
 
               //redirect
               this.$router.push('/tickets/list');

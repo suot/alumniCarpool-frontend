@@ -20,36 +20,34 @@
 
         <div class="col-md-9" v-if="curTab === 'general'">
           <b-card-body class="media align-items-center">
-
-            <img :src="`${baseUrl}img/avatars/${accountData.avatar}`" alt="" class="d-block ui-w-80">
+            <img :src="`${baseUrl}img/avatars/${userData.avatar}`" alt="" class="d-block ui-w-80">
             <div class="media-body ml-4">
-              <b-btn variant="outline-primary">Upload new photo</b-btn> &nbsp;
-              <b-btn variant="default md-btn-flat">Reset</b-btn>
-              <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+              <b-btn variant="outline-primary">Upload avatar</b-btn> &nbsp;
+              <!-- <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div> -->
             </div>
-
           </b-card-body>
-          <hr class="border-light m-0">
-          <b-card-body>
 
+          <hr class="border-light m-0">
+
+          <b-card-body>
             <b-form-group label="First Name">
-              <b-input v-model="accountData.firstName" />
+              <b-input v-model="userData.firstName" />
             </b-form-group>
 
             <b-form-group label="Last Name">
-              <b-input v-model="accountData.lastName" />
+              <b-input v-model="userData.lastName" />
             </b-form-group>
 
             <b-form-group label="Email">
-              <b-input v-model="accountData.email" />
-              <b-alert variant="warning" show class="mt-3 mb-0" v-if="!accountData.verified">
+              <b-input v-model="userData.email" />
+              <b-alert variant="warning" show class="mt-3 mb-0" v-if="!userData.verified">
                 Your email is not confirmed. Please check your inbox.<br>
                 <a href="javascript:void(0)">Resend confirmation</a>
               </b-alert>
             </b-form-group>
 
-            <b-form-group label="University">
-              <b-input v-model="accountData.almaMater" />
+            <b-form-group label="Alma Mater">
+              <b-input v-model="userData.almaMater" />
             </b-form-group>
 
           </b-card-body>
@@ -77,205 +75,60 @@
           <b-card-body class="pb-2">
 
             <b-form-group label="Current Role">
-              <!-- <b-textarea v-model="accountData.info.currentRole" rows="5" /> -->
-              <b-select v-model="accountData.info.currentRole" :options="['Passenger', 'Driver']"/>
+              <b-select v-model="userData.currentRole" :options="['Passenger', 'Driver']"/>
             </b-form-group>
 
             <b-form-group label="Gender">
-              <b-select v-model="accountData.info.gender" :options="['Female', 'Male']"/>
+              <b-select v-model="userData.gender" :options="['Female', 'Male']"/>
             </b-form-group>
-
-            <b-form-group label="City">
-              <b-select v-model="accountData.info.city" :options="['Windsor', 'Toronto', 'Waterloo', 'London']" />
-            </b-form-group>
-
-            <!-- <b-form-group label="Languages">
-              <multiselect v-model="accountData.info.languages" :multiple="true" :options="['English', 'German', 'French']" />
-            </b-form-group> -->
 
           </b-card-body>
           <hr class="border-light m-0">
           <b-card-body class="pb-2">
-
             <h6 class="mb-4">Contacts</h6>
-
             <b-form-group label="Phone">
-              <b-input v-model="accountData.info.phone" />
+              <b-input v-model="userData.phone" />
             </b-form-group>
-
-            <!-- <b-form-group label="Website">
-              <b-input v-model="accountData.info.website" />
-            </b-form-group> -->
-
           </b-card-body>
           <hr class="border-light m-0">
           <b-card-body class="pb-2">
-
             <h6 class="mb-4">Preferences</h6>
-
             <b-form-group label="Tags">
-              <multiselect v-model="accountData.info.tags" :multiple="true" :taggable="true" :options="[]" @tag="addTag" placeholder="Add tag" />
+              <multiselect v-model="userData.tags" :multiple="true" :taggable="true" :options="[]" @tag="addTag" placeholder="Add tag" />
             </b-form-group>
-
-            <!-- <b-form-group label="Favorite movies">
-              <multiselect v-model="accountData.info.movies" :multiple="true" :taggable="true" :options="[]" @tag="addMovieTag" placeholder="Add tag" />
-            </b-form-group> -->
-
           </b-card-body>
         </div>
 
-        <!-- <div class="col-md-9" v-if="curTab === 'links'">
-          <b-card-body class="pb-2">
-            <b-form-group label="Twitter">
-              <b-input v-model="accountData.info.twitter" />
-            </b-form-group>
-            <b-form-group label="Facebook">
-              <b-input v-model="accountData.info.facebook" />
-            </b-form-group>
-            <b-form-group label="Google+">
-              <b-input v-model="accountData.info.google" />
-            </b-form-group>
-            <b-form-group label="LinkedIn">
-              <b-input v-model="accountData.info.linkedin" />
-            </b-form-group>
-            <b-form-group label="Instagram">
-              <b-input v-model="accountData.info.instagram" />
-            </b-form-group>
-          </b-card-body>
-        </div> -->
-
-
-
         <div class="col-md-9" v-if="curTab === 'proof'">
           <b-card-body class="pb-2">
-
             <b-form-group label="Student ID">
-              <b-input v-model="accountData.info.studentId" />
+              <b-input v-model="userData.studentId" />
             </b-form-group>
-
-            <img :src="`${baseUrl}img/avatars/${accountData.avatar}`" alt="" class="d-block ui-w-80">
-            &nbsp;
+            <img :src="`${baseUrl}img/avatars/${userData.avatar}`" alt="" class="d-block ui-w-80">&nbsp;
             <div class="media-body ml-4">
-              <b-btn variant="outline-primary">Upload new photo</b-btn> &nbsp;
-              <b-btn variant="default md-btn-flat">Reset</b-btn>
+              <b-btn variant="outline-primary">Upload avatar</b-btn> &nbsp;
               <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
             </div>
-
           </b-card-body>
         </div>
 
         <div class="col-md-9" v-if="curTab === 'cars'">
           <b-card-body class="pb-2">
-
             <b-form-group label="Plate Number">
-              <b-input v-model="accountData.info.plateNum" />
+              <b-input v-model="userData.driver.car.plateNum" />
             </b-form-group>
-            <img :src="`${baseUrl}img/avatars/${accountData.avatar}`" alt="" class="d-block ui-w-80">
+            <img :src="`${baseUrl}img/avatars/${userData.avatar}`" alt="" class="d-block ui-w-80">
             &nbsp;
             <div class="media-body ml-4">
-              <b-btn variant="outline-primary">Upload new photo</b-btn> &nbsp;
-              <b-btn variant="default md-btn-flat">Reset</b-btn>
+              <b-btn variant="outline-primary">Upload photos</b-btn> &nbsp;
               <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
             </div>
             &nbsp;
             <b-form-group label="Seats">
-              <multiselect v-model="accountData.info.seats" :multiple="true" :taggable="true" :options="[]" @tag="addSeat" placeholder="Add seat" />
+              <multiselect v-model="userData.car.seats" :multiple="true" :taggable="true" :options="[]" @tag="addSeat" placeholder="Add seat" />
             </b-form-group>
           </b-card-body>
         </div>
-        <!-- <div class="col-md-9" v-if="curTab === 'connections'">
-          <b-card-body>
-            <b-btn variant="twitter">Connect to <strong>Twitter</strong></b-btn>
-          </b-card-body>
-          <hr class="border-light m-0">
-          <b-card-body>
-            <h5 class="mb-2">
-              <a href="javascript:void(0)" class="float-right text-muted text-tiny"><i class="ion ion-md-close"></i> Remove</a>
-              <i class="ion ion-logo-google text-google"></i>
-              You are connected to Google:
-            </h5>
-            nmaxwell@mail.com
-          </b-card-body>
-          <hr class="border-light m-0">
-          <b-card-body>
-            <b-btn variant="facebook">Connect to <strong>Facebook</strong></b-btn>
-          </b-card-body>
-          <hr class="border-light m-0">
-          <b-card-body>
-            <b-btn variant="instagram">Connect to <strong>Instagram</strong></b-btn>
-          </b-card-body>
-        </div> -->
-
-        <!-- <div class="col-md-9" v-if="curTab === 'notifications'">
-          <b-card-body class="pb-2">
-            <h6 class="mb-4">Activity</h6>
-            <b-form-group>
-              <label class="switcher">
-                <input type="checkbox" class="switcher-input" v-model="accountData.notifications.comments">
-                <span class="switcher-indicator">
-                  <span class="switcher-yes"></span>
-                  <span class="switcher-no"></span>
-                </span>
-                <span class="switcher-label">Email me when someone comments on my article</span>
-              </label>
-            </b-form-group>
-            <b-form-group>
-              <label class="switcher">
-                <input type="checkbox" class="switcher-input" v-model="accountData.notifications.forum">
-                <span class="switcher-indicator">
-                  <span class="switcher-yes"></span>
-                  <span class="switcher-no"></span>
-                </span>
-                <span class="switcher-label">Email me when someone answers on my forum thread</span>
-              </label>
-            </b-form-group>
-            <b-form-group>
-              <label class="switcher">
-                <input type="checkbox" class="switcher-input" v-model="accountData.notifications.followings">
-                <span class="switcher-indicator">
-                  <span class="switcher-yes"></span>
-                  <span class="switcher-no"></span>
-                </span>
-                <span class="switcher-label">Email me when someone follows me</span>
-              </label>
-            </b-form-group>
-          </b-card-body>
-          <hr class="border-light m-0">
-          <b-card-body class="pb-2">
-            <h6 class="mb-4">Application</h6>
-            <b-form-group>
-              <label class="switcher">
-                <input type="checkbox" class="switcher-input" v-model="accountData.notifications.news">
-                <span class="switcher-indicator">
-                  <span class="switcher-yes"></span>
-                  <span class="switcher-no"></span>
-                </span>
-                <span class="switcher-label">News and announcements</span>
-              </label>
-            </b-form-group>
-            <b-form-group>
-              <label class="switcher">
-                <input type="checkbox" class="switcher-input" v-model="accountData.notifications.products">
-                <span class="switcher-indicator">
-                  <span class="switcher-yes"></span>
-                  <span class="switcher-no"></span>
-                </span>
-                <span class="switcher-label">Weekly product updates</span>
-              </label>
-            </b-form-group>
-            <b-form-group>
-              <label class="switcher">
-                <input type="checkbox" class="switcher-input" v-model="accountData.notifications.blog">
-                <span class="switcher-indicator">
-                  <span class="switcher-yes"></span>
-                  <span class="switcher-no"></span>
-                </span>
-                <span class="switcher-label">Weekly blog digest</span>
-              </label>
-            </b-form-group>
-          </b-card-body>
-        </div> -->
-
       </div>
     </b-card>
 
@@ -296,54 +149,91 @@
 <script>
 import Multiselect from 'vue-multiselect'
 export default {
-  name: 'pages-account-settings',
+  name: 'account-settings',
   metaInfo: {
-    title: 'Account settings - Pages'
+    title: 'Account settings'
   },
   components: {
     Multiselect
   },
   data: () => ({
     curTab: 'general',
-    accountData: {
+
+    userData: {
+      email: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      currentRole: '',
+      phone: '',
       avatar: '5-small.png',
-      firstName: 'Tina',
-      lastName: 'White',
-      email: 'nmaxwell@mail.com',
-      almaMater: 'University of Windsor.',
+      almaMater: '',
+      studentId: '',
+      certificate: [],
+      tags: [],
       verified: false,
-      info: {
-        currentRole: 'Passenger',
-        gender: 'Female',
-        city: 'Windsor',
-        languages: ['English'],
-        phone: '+1 (123) 456 7891',
-        website: '',
-        tags: ['Outgoing', 'No Smoking', 'Pet Friendly', 'Music'],
-        seats: ['Front', 'Back Left', 'Back Right'],
-        studentId: '104-184-772',
-        plateNum: '3F208',
-        google: '',
-        linkedin: '',
-        instagram: 'https://www.instagram.com/user'
-      },
-      notifications: {
-        comments: true,
-        forum: true,
-        followings: false,
-        news: true,
-        products: false,
-        blog: true
+      car: {
+        plateNum: '',
+        carPhoto: '',
+        seats: [
+          {
+
+          }
+        ]
+
       }
+
     }
   }),
+
   methods: {
     addTag (newTag) {
-      this.accountData.info.tags.push(newTag)
+      this.userData.tags.push(newTag)
     },
      addSeat (newTag) {
-      this.accountData.info.seats.push(newTag)
+      this.userData.car.seats.push(newTag)
     }
-  }
+  },
+
+  created () {
+    const user = this.$store.state.userLoggedIn;
+    if(user.email){
+      this.userData.email = user.email;
+    }
+    if(user.password){
+      this.userData.password = user.password;
+    }
+    if(user.firstName){
+      this.userData.firstName = user.firstName;
+    }
+    if(user.lastName){
+      this.userData.lastName = user.lastName;
+    }
+    if(user.currentRole){
+      this.userData.currentRole = user.currentRole;
+    }
+    if(user.phone){
+      this.userData.phone = user.phone;
+    }
+    if(user.avatar){
+      this.userData.avatar = user.avatar;
+    }
+    if(user.studentId){
+      this.userData.studentId = user.studentId;
+    }
+    if(user.certificate){
+      this.userData.certificate = user.certificate;
+    }
+    if(user.tags){
+      this.userData.tags = user.tags;
+    }
+    if(user.verified){
+      this.userData.verified = user.verified;
+    }
+    if(user.car){
+      this.userData.car = user.car;
+    }
+  },
+
 }
 </script>
