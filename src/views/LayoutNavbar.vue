@@ -162,7 +162,7 @@
           <b-dd-item><i class="ion ion-ios-mail text-lightest"></i> &nbsp; Messages</b-dd-item>
           <b-dd-item><router-link to="/users/account-settings"><i class="ion ion-md-settings text-lightest"></i> &nbsp; Account settings</router-link></b-dd-item>
           <b-dd-divider />
-          <b-dd-item><i class="ion ion-ios-log-out text-danger"></i> &nbsp; Log Out</b-dd-item>
+          <b-dd-item @click="checkOut()"><i class="ion ion-ios-log-out text-danger"></i> &nbsp; Log Out</b-dd-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -195,6 +195,11 @@ export default {
       return this.layoutNavbarBg
     },
 
+    checkOut () {
+      this.$store.commit('update_isLoggedIn', false);
+      this.$store.commit('update_userLoggedIn', null);
+      this.$router.push('/logout');
+    },
   }
 }
 </script>
