@@ -92,8 +92,8 @@ export default new Router({
       ]
     },
     {
-      path: '/posts',
-      name: 'posts',
+      path: '/postings',
+      name: 'postings',
       component: MainPage,
       meta:{
         requiresAuth: true,
@@ -102,11 +102,12 @@ export default new Router({
       [
         {
           path: 'list',
-          component: () => import('@/components/posts/PostsList')
+          component: () => import('@/components/postings/PostingsList')
         },
         {
           path: 'create',
-          component: () => import('@/components/posts/PostsCreate')
+          name: 'postings-create',
+          component: () => import('@/components/postings/PostingsCreate')
         }
       ]
     },

@@ -18,7 +18,7 @@
       <sidenav-divider class="mb-1"/>
       <sidenav-header class="small font-weight-semibold">611-Alumni Carpool</sidenav-header>
       <sidenav-router-link icon="ion ion-md-quote" to="/tickets/list" :exact="true">Tickets</sidenav-router-link>
-      <sidenav-router-link icon="ion ion-md-quote" to="/posts/list" :exact="true">Posts</sidenav-router-link>
+      <sidenav-router-link icon="ion ion-md-quote" to="/postings/list" :exact="true">Postings</sidenav-router-link>
 
       <sidenav-divider class="mb-1"/>
       <sidenav-header class="small font-weight-semibold">654-CPI Search Engine</sidenav-header>
