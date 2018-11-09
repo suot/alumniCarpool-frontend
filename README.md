@@ -1,6 +1,11 @@
 # alumniCarpool
 
-## Project setup
+## Clone source code
+```
+Git clone https://github.com/hongshuidang/alumniCarpool-Frontend.git
+```
+
+## Project setup: install dependencies
 ```
 npm install
 ```
@@ -13,11 +18,6 @@ npm run serve
 ### Compiles and minifies for production
 ```
 npm run build
-```
-
-### Run your tests
-```
-npm run test
 ```
 
 ### Lints and fixes files
