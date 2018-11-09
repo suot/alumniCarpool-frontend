@@ -12,9 +12,7 @@
             <b-list-group-item button :active="curTab === 'general'" @click="curTab = 'general'">General</b-list-group-item>
             <b-list-group-item button :active="curTab === 'password'" @click="curTab = 'password'">Change password</b-list-group-item>
             <b-list-group-item button :active="curTab === 'info'" @click="curTab = 'info'">Info</b-list-group-item>
-            <b-list-group-item button :active="curTab === 'proof'" @click="curTab = 'proof'">Alumni proof</b-list-group-item>
-            <b-list-group-item button :active="curTab === 'cars'" @click="curTab = 'cars'">Car Info</b-list-group-item>
-            <!-- <b-list-group-item button :active="curTab === 'notifications'" @click="curTab = 'notifications'">Notifications</b-list-group-item> -->
+            <b-list-group-item button :active="curTab === 'car'" @click="curTab = 'car'">Car Info</b-list-group-item>
           </b-list-group>
         </div>
 
@@ -46,10 +44,6 @@
               </b-alert>
             </b-form-group>
 
-            <b-form-group label="Alma Mater">
-              <b-input v-model="userData.almaMater" />
-            </b-form-group>
-
           </b-card-body>
         </div>
 
@@ -73,7 +67,6 @@
 
         <div class="col-md-9" v-if="curTab === 'info'">
           <b-card-body class="pb-2">
-
             <b-form-group label="Current Role">
               <b-select v-model="userData.currentRole" :options="['Passenger', 'Driver']"/>
             </b-form-group>
@@ -82,28 +75,29 @@
               <b-select v-model="userData.gender" :options="['Female', 'Male']"/>
             </b-form-group>
 
-          </b-card-body>
-          <hr class="border-light m-0">
-          <b-card-body class="pb-2">
-            <h6 class="mb-4">Contacts</h6>
             <b-form-group label="Phone">
               <b-input v-model="userData.phone" />
             </b-form-group>
-          </b-card-body>
-          <hr class="border-light m-0">
-          <b-card-body class="pb-2">
-            <h6 class="mb-4">Preferences</h6>
+
             <b-form-group label="Tags">
               <multiselect v-model="userData.tags" :multiple="true" :taggable="true" :options="[]" @tag="addTag" placeholder="Add tag" />
             </b-form-group>
-          </b-card-body>
-        </div>
 
-        <div class="col-md-9" v-if="curTab === 'proof'">
+          </b-card-body>
+
+          <hr class="border-light m-0">
+
           <b-card-body class="pb-2">
+            <!-- <h6 class="mb-4">Alumni certificate</h6> -->
+
+            <b-form-group label="Alma Mater">
+              <b-input v-model="userData.almaMater" />
+            </b-form-group>
+
             <b-form-group label="Student ID">
               <b-input v-model="userData.studentId" />
             </b-form-group>
+
             <img :src="`${baseUrl}img/avatars/${userData.avatar}`" alt="" class="d-block ui-w-80">&nbsp;
             <div class="media-body ml-4">
               <b-btn variant="outline-primary">Upload avatar</b-btn> &nbsp;
@@ -112,7 +106,8 @@
           </b-card-body>
         </div>
 
-        <div class="col-md-9" v-if="curTab === 'cars'">
+
+        <div class="col-md-9" v-if="curTab === 'car'">
           <b-card-body class="pb-2">
             <b-form-group label="Plate Number">
               <b-input v-model="userData.driver.car.plateNum" />
