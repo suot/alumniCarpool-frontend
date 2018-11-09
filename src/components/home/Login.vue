@@ -60,8 +60,6 @@ export default {
     title: 'Login'
   },
   data: () => ({
-    dataUrl: 'http://localhost:1010/users',
-
     credentials: {
       email: '',
       password: '',
@@ -71,7 +69,7 @@ export default {
   }),
   methods: {
     checkCredentials(){
-      let url = this.dataUrl+"/get?email="+this.credentials.email;
+      let url = this.$store.state.dataUrl + "/users/get?email="+this.credentials.email;
 
       this.$http.get(url).then(
         response => {

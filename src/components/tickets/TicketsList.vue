@@ -188,7 +188,7 @@ export default {
 
     startJourney(row){
       row.status = "On-board";
-      let url = this.dataUrl+'/update/'+ row.id;
+      let url = this.$store.state.dataUrl+'/orders/update/'+ row.id;
       this.$http.put(url, row).then(response => {
         //notification
         this.$notify({
@@ -212,7 +212,7 @@ export default {
     },
 
     deleteTicket(row){
-      this.$http.delete(this.dataUrl+'/delete/'+row.id).then(response => {
+      this.$http.delete(this.$store.state.dataUrl+'/orders/delete/'+row.id).then(response => {
         //notification
         this.$notify({
           group: 'alumniCarpoolNotification',
@@ -234,7 +234,7 @@ export default {
     },
 
     show(from, to, date){
-      let url =  this.dataUrl+'/get/allOngoing?departureCity='+ from + '&arrivalCity='+to+'&departureDate='+date;
+      let url =  this.$store.state.dataUrl+'/orders/get/allOngoing?departureCity='+ from + '&arrivalCity='+to+'&departureDate='+date;
       const req = new XMLHttpRequest()
       req.open('GET', url)
       req.onload = () => {

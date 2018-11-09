@@ -81,8 +81,6 @@ export default {
   },
 
   data: () => ({
-    dataUrl: 'http://localhost:1010/orders',
-
     order: {
       driver: {},
       status: "Vacant",
@@ -99,7 +97,7 @@ export default {
 
   methods: {
     createTicket(){
-      this.$http.post(this.dataUrl+"/create", this.order).then(response => {
+      this.$http.post(this.$store.state.dataUrl+'/orders/create', this.order).then(response => {
         //notification
         this.$notify({
           group: 'alumniCarpoolNotification',

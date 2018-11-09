@@ -63,8 +63,6 @@ export default {
     title: 'Register'
   },
   data: () => ({
-    dataUrl: 'http://localhost:1010/users',
-
     user: {
       firstName: '',
       lastName: '',
@@ -75,7 +73,7 @@ export default {
   }),
   methods: {
     createUser(){
-      this.$http.post(this.dataUrl+"/create", this.user).then(
+      this.$http.post(this.$store.state.dataUrl+"/users/create", this.user).then(
         response => {
           //notification
 

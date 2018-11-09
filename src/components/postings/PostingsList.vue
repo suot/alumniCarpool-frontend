@@ -121,7 +121,6 @@ export default {
   },
   data: () => ({
     // Options
-    dataUrl: 'http://localhost:1010/postings',
     searchKeys: ['id'],
     sortBy: 'id',
     sortDesc: false,
@@ -175,7 +174,7 @@ export default {
     },
 
     deletePosting(row){
-      this.$http.delete(this.dataUrl+'/delete/'+row.id).then(response => {
+      this.$http.delete(this.$store.state.dataUrl+'/postings/delete/'+row.id).then(response => {
         //notification
         this.$notify({
           group: 'alumniCarpoolNotification',
@@ -199,7 +198,7 @@ export default {
     },
 
     show(from, to, date){
-      let url =  this.dataUrl+'/get/all?departureCity='+ from + '&arrivalCity='+to+'&departureDate='+date;
+      let url =  this.$store.state.dataUrl+'/postings/get/all?departureCity='+ from + '&arrivalCity='+to+'&departureDate='+date;
       const req = new XMLHttpRequest()
       req.open('GET', url)
       req.onload = () => {

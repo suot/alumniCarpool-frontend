@@ -80,9 +80,7 @@ export default {
     flatPickr,
   },
 
-  data: () => ({
-    dataUrl: 'http://localhost:1010/postings',
-
+  data: () => ({  
     posting: {
       passenger: {},
       departureCity: "",
@@ -98,7 +96,7 @@ export default {
 
   methods: {
     createPosting(){
-      this.$http.post(this.dataUrl+"/create", this.posting).then(response => {
+      this.$http.post(this.$store.state.dataUrl+"/postings/create", this.posting).then(response => {
         //notification
         this.$notify({
           group: 'alumniCarpoolNotification',

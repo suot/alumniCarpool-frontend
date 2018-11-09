@@ -23,7 +23,8 @@ Vue.use(Notifications, { velocity })
 const store = new Vuex.Store({
   state: {
     isLoggedIn: false,
-    userLoggedIn: null
+    userLoggedIn: null,
+    dataUrl: 'http://10.142.2.69:1010'
   },
   mutations: {
     update_isLoggedIn (state, newValue) { state.isLoggedIn = newValue; },
