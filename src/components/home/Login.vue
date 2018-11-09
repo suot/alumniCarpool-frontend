@@ -26,7 +26,7 @@
             <b-form-group>
               <div slot="label" class="d-flex justify-content-between align-items-end">
                 <div>Password</div>
-                <a href="javascript:void(0)" class="d-block small">Forgot password?</a>
+                <router-link to="/password-reset"><a href="javascript:void(0)" class="d-block small">Forgot password?</a></router-link>
               </div>
               <b-input type="password" v-model="credentials.password" />
             </b-form-group>

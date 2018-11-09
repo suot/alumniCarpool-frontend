@@ -66,7 +66,7 @@
 
             <div v-for="(seat, i) in seats" :key="i" class="ui-feed-icon-container d-inline-block mr-1 mb-1">
               <a @click.prevent="seats.splice(i, 1)" href="#" class="ui-icon ui-feed-icon ion ion-ios-close bg-secondary text-white"></a>
-              <img :src="`${baseUrl}img/avatars/1.png`" v-b-tooltip.hover :title="seat" class="ticket-assignee d-block ui-w-30 rounded-circle">
+              <img :src="`${baseUrl}img/avatars/1.png`" v-b-tooltip.hover :title="seat" class="ticket-assignee d-block ui-w-50 rounded-circle">
             </div>
 
             <!-- <a href="javascript:void(0)" class="ticket-assignee-add bg-lighter text-muted mb-3">
