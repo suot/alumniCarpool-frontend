@@ -177,10 +177,23 @@ export default {
     deletePosting(row){
       this.$http.delete(this.dataUrl+'/delete/'+row.id).then(response => {
         //notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'success',
+          title: 'Posting-delete',
+          text: 'Posting is deleted successfully!'
+        })
 
         //delete the data in table
       }, response => {
         //error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'Posting-delete',
+          text: 'Posting is not deleted successfully!'
+        })
+
       });
 
     },

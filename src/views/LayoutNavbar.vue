@@ -159,7 +159,7 @@
           </template>
 
           <b-dd-item><router-link to="/users/view"><i class="ion ion-ios-person text-lightest"></i> &nbsp; My profile</router-link></b-dd-item>
-          <b-dd-item><i class="ion ion-ios-mail text-lightest"></i> &nbsp; Messages</b-dd-item>
+          <!-- <b-dd-item><i class="ion ion-ios-mail text-lightest"></i> &nbsp; Messages</b-dd-item> -->
           <b-dd-item><router-link to="/users/account-settings"><i class="ion ion-md-settings text-lightest"></i> &nbsp; Account settings</router-link></b-dd-item>
           <b-dd-divider />
           <b-dd-item @click="checkOut()"><i class="ion ion-ios-log-out text-danger"></i> &nbsp; Log Out</b-dd-item>

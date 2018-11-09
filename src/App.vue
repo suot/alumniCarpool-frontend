@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <notifications group="alumniCarpoolNotification" position="bottom center"/>
     <router-view/>
   </div>
 </template>

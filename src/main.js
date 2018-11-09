@@ -6,6 +6,10 @@ import BootstrapVue from 'bootstrap-vue'
 import VueResource from 'vue-resource'
 import Vuex from 'vuex'
 import globals from './globals'
+import Notifications from 'vue-notification'
+import velocity from 'velocity-animate'
+
+
 
 Vue.config.productionTip = false
 
@@ -13,6 +17,8 @@ Vue.use(BootstrapVue)
 Vue.use(Vuelidate)
 Vue.use(VueResource)
 Vue.use(Vuex)
+Vue.use(Notifications, { velocity })
+
 
 const store = new Vuex.Store({
   state: {

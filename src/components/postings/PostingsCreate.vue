@@ -100,11 +100,22 @@ export default {
     createPosting(){
       this.$http.post(this.dataUrl+"/create", this.posting).then(response => {
         //notification
-
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'success',
+          title: 'Posting-create',
+          text: 'Posting is created successfully!'
+        })
         //redirect
         this.$router.push('/postings/list');
       }, response => {
         // error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'Posting-create',
+          text: 'Posting is not created successfully!'
+        })
       });
     }
 

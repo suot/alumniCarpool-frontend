@@ -191,11 +191,22 @@ export default {
       let url = this.dataUrl+'/update/'+ row.id;
       this.$http.put(url, row).then(response => {
         //notification
-
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'success',
+          title: 'Ticket-change',
+          text: 'Have a nice journey!'
+        })
         //redirect
         //this.$router.push('/tickets/list');
       }, response => {
         //error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'Ticket-change',
+          text: 'Error occurred when changing ticket\'s status!'
+        })
       });
 
     },
@@ -203,10 +214,21 @@ export default {
     deleteTicket(row){
       this.$http.delete(this.dataUrl+'/delete/'+row.id).then(response => {
         //notification
-
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'warn',
+          title: 'Ticket-delete',
+          text: 'Ticket is deleted successfully!'
+        })
         //delete the data in table
       }, response => {
         //error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'Ticket-delete',
+          text: 'Ticket is not deleted successfully!'
+        })
       });
 
     },

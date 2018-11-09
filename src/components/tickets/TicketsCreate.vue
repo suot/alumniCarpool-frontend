@@ -101,11 +101,22 @@ export default {
     createTicket(){
       this.$http.post(this.dataUrl+"/create", this.order).then(response => {
         //notification
-
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'success',
+          title: 'Ticket-create',
+          text: 'Ticket is created successfully!'
+        })
         //redirect
         this.$router.push('/tickets/list');
       }, response => {
         // error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'Ticket-create',
+          text: 'Ticket is not created successfully!'
+        })
       });
     }
 
