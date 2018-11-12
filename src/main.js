@@ -10,7 +10,6 @@ import Notifications from 'vue-notification'
 import velocity from 'velocity-animate'
 
 
-
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
@@ -24,7 +23,7 @@ const store = new Vuex.Store({
   state: {
     isLoggedIn: false,
     userLoggedIn: null,
-    dataUrl: 'http://10.142.2.69:1010'
+    dataUrl: 'http://localhost:1010'
   },
   mutations: {
     update_isLoggedIn (state, newValue) { state.isLoggedIn = newValue; },

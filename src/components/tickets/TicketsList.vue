@@ -126,7 +126,6 @@ export default {
   },
   data: () => ({
     // Options
-    dataUrl: 'http://localhost:1010/orders',
     searchKeys: ['id'],
     sortBy: 'id',
     sortDesc: false,

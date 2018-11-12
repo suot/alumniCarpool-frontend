@@ -97,6 +97,9 @@ export default {
 
   methods: {
     createTicket(){
+      //add driver to the created orders
+      this.order.driver = this.$store.state.userLoggedIn;
+      
       this.$http.post(this.$store.state.dataUrl+'/orders/create', this.order).then(response => {
         //notification
         this.$notify({
@@ -104,7 +107,7 @@ export default {
           type: 'success',
           title: 'Ticket-create',
           text: 'Ticket is created successfully!'
-        })
+        });
         //redirect
         this.$router.push('/tickets/list');
       }, response => {
@@ -114,7 +117,7 @@ export default {
           type: 'error',
           title: 'Ticket-create',
           text: 'Ticket is not created successfully!'
-        })
+        });
       });
     }
 

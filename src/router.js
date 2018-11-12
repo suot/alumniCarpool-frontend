@@ -3,8 +3,8 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import MainPage from './views/MainPage.vue'
 
-
 Vue.use(Router)
+
 
 export default new Router({
   mode: 'history',

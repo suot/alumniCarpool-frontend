@@ -10,7 +10,7 @@
         <div class="col-md-3 pt-0">
           <b-list-group class="account-settings-links" flush>
             <b-list-group-item button :active="curTab === 'general'" @click="curTab = 'general'">General</b-list-group-item>
-            <b-list-group-item button :active="curTab === 'password'" @click="curTab = 'password'">Change password</b-list-group-item>
+            <!-- <b-list-group-item button :active="curTab === 'password'" @click="curTab = 'password'">Change password</b-list-group-item> -->
             <b-list-group-item button :active="curTab === 'info'" @click="curTab = 'info'">Info</b-list-group-item>
             <b-list-group-item button :active="curTab === 'car'" @click="curTab = 'car'">Car Info</b-list-group-item>
           </b-list-group>
@@ -18,11 +18,45 @@
 
         <div class="col-md-9" v-if="curTab === 'general'">
           <b-card-body class="media align-items-center">
-            <img :src="`${baseUrl}img/avatars/${userData.avatar}`" alt="" class="d-block ui-w-80">
-            <div class="media-body ml-4">
-              <b-btn variant="outline-primary">Upload avatar</b-btn> &nbsp;
-              <!-- <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div> -->
-            </div>
+
+            <div class="example-avatar">
+                <div v-show="$refs.upload && $refs.upload.dropActive" class="drop-active">
+                  <h3>Drop file to upload</h3>
+                </div>
+                <div class="avatar-upload"  v-show="!edit">
+                  <div class="text-center p-2">
+                    <label for="avatar">
+                      <img :src="files.length ? files[0].url : `${baseUrl}img/upload_file_none.png`"  class="rounded-circle" />
+                      <!-- <h6 class="pt-2">Drop file here to upload</h6> -->
+                    </label>
+                  </div>
+                  <div class="text-center p-2">
+                    <file-upload
+                      extensions="gif,jpg,jpeg,png"
+                      accept="image/png,image/gif,image/jpeg"
+                      name="avatar"
+                      class="btn btn-primary"
+                      :drop="!edit"
+                      v-model="files"
+                      @input-filter="inputFilter"
+                      @input-file="inputFile"
+                      ref="upload">
+                      Select avatar
+                    </file-upload>
+                  </div>
+                </div>
+
+                <div class="avatar-edit" v-show="files.length && edit">
+                  <div class="avatar-edit-image" v-if="files.length">
+                    <img ref="editImage" :src="files[0].url" />
+                  </div>
+                  <div class="text-center p-4">
+                    <button type="button" class="btn btn-secondary" @click.prevent="$refs.upload.clear">Cancel</button>
+                    <button type="submit" class="btn btn-primary" @click.prevent="editSave">Save and upload</button>
+                  </div>
+                </div>
+              </div>
+
           </b-card-body>
 
           <hr class="border-light m-0">
@@ -47,7 +81,7 @@
           </b-card-body>
         </div>
 
-        <div class="col-md-9" v-if="curTab === 'password'">
+        <!-- <div class="col-md-9" v-if="curTab === 'password'">
           <b-card-body class="pb-2">
 
             <b-form-group label="Current password">
@@ -63,7 +97,7 @@
             </b-form-group>
 
           </b-card-body>
-        </div>
+        </div> -->
 
         <div class="col-md-9" v-if="curTab === 'info'">
           <b-card-body class="pb-2">
@@ -80,7 +114,7 @@
             </b-form-group>
 
             <b-form-group label="Tags">
-              <multiselect v-model="userData.tags" :multiple="true" :taggable="true" :options="[]" @tag="addTag" placeholder="Add tag" />
+              <input-tag placeholder="Add tags" v-model="userData.tags"></input-tag>
             </b-form-group>
 
           </b-card-body>
@@ -98,29 +132,34 @@
               <b-input v-model="userData.studentId" />
             </b-form-group>
 
-            <img :src="`${baseUrl}img/avatars/${userData.avatar}`" alt="" class="d-block ui-w-80">&nbsp;
-            <div class="media-body ml-4">
-              <b-btn variant="outline-primary">Upload avatar</b-btn> &nbsp;
-              <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
-            </div>
+            <!-- <img :src="`${baseUrl}img/avatars/${userData.avatar}`" alt="" class="d-block ui-w-80">&nbsp; -->
+            <b-form-group label="Upload certificate">
+              <!-- <b-input v-model="userData.certificate" /> -->
+              <div class="media-body ml-4">
+                <b-btn variant="outline-primary">Upload certificate</b-btn> &nbsp;
+                <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+              </div>
+            </b-form-group>
+
+
           </b-card-body>
         </div>
-
 
         <div class="col-md-9" v-if="curTab === 'car'">
           <b-card-body class="pb-2">
             <b-form-group label="Plate Number">
-              <b-input v-model="userData.driver.car.plateNum" />
+              <b-input v-model="userData.car.plateNum" />
             </b-form-group>
-            <img :src="`${baseUrl}img/avatars/${userData.avatar}`" alt="" class="d-block ui-w-80">
-            &nbsp;
-            <div class="media-body ml-4">
-              <b-btn variant="outline-primary">Upload photos</b-btn> &nbsp;
-              <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
-            </div>
-            &nbsp;
+
+            <b-form-group label="Upload your car photo">
+              <div class="media-body ml-4">
+                <b-btn variant="outline-primary">Upload car photo</b-btn> &nbsp;
+                <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+              </div>
+            </b-form-group>
+
             <b-form-group label="Seats">
-              <multiselect v-model="userData.car.seats" :multiple="true" :taggable="true" :options="[]" @tag="addSeat" placeholder="Add seat" />
+              <input-tag placeholder="Add seats" v-model="vacantSeats"></input-tag>
             </b-form-group>
           </b-card-body>
         </div>
@@ -128,57 +167,64 @@
     </b-card>
 
     <div class="text-right mt-3">
-      <b-btn variant="primary">Save changes</b-btn>&nbsp;
+      <b-btn variant="primary" @click='saveChanges()'>Save changes</b-btn>&nbsp;
       <b-btn variant="default">Cancel</b-btn>
     </div>
 
   </div>
 </template>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css" />
-<style src="@/vendor/libs/vue-multiselect/vue-multiselect.scss" lang="scss"></style>
 
-<!-- Page -->
-<style src="@/vendor/styles/pages/account.scss" lang="scss"></style>
+
+
 
 <script>
-import Multiselect from 'vue-multiselect'
+import Cropper from 'cropperjs'
+import FileUpload from 'vue-upload-component'
+import InputTag from 'vue-input-tag'
+
+
 export default {
   name: 'account-settings',
   metaInfo: {
     title: 'Account settings'
   },
   components: {
-    Multiselect
+    FileUpload,
+    InputTag
   },
   data: () => ({
     curTab: 'general',
 
+    vacantSeats: [],
+
     userData: {
-      email: '',
-      password: '',
+      id: '',
       firstName: '',
       lastName: '',
+      email: '',
+      password: '',
       currentRole: '',
+      gender: '',
       phone: '',
-      avatar: '5-small.png',
+      //avatar: '5-small.png',
       almaMater: '',
       studentId: '',
-      certificate: [],
+      //certificate: [],
       tags: [],
       verified: false,
       car: {
         plateNum: '',
-        carPhoto: '',
-        seats: [
-          {
-
-          }
-        ]
-
+        //carPhoto: '',
+        seats: [],
       }
+    },
 
-    }
+    //fileUpload
+    files: [],
+    edit: false,
+    cropper: false,
+
   }),
 
   methods: {
@@ -187,11 +233,147 @@ export default {
     },
      addSeat (newTag) {
       this.userData.car.seats.push(newTag)
+    },
+
+    saveChanges(){
+      //traverse vacantSeats
+      if(this.vacantSeats){
+        for (let i = 0; i < this.vacantSeats.length; i++){
+          let seat = {
+            position: this.vacantSeats[i],
+            reserved: false,
+            rated: false,
+            passenger: {},
+          };
+
+          //TODO:post seat into db and get its id back; Use id to find a seat later.
+          //use seat's unique position value to find it alternatively.
+          this.userData.car.seats.push(seat);
+        }
+      }else{
+        this.userData.car.seats = [];
+      }
+
+      //post to server
+      this.$http.post(this.$store.state.dataUrl+"/users/update", this.userData).then(response => {
+        //notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'success',
+          title: 'User-update',
+          text: 'User profile is updated successfully. Please log in again to see your changes!'
+        })
+        //redirect
+        this.$router.push('/login');
+      }, response => {
+        // error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'User-update',
+          text: 'User profile is not updated successfully!'
+        })
+      });
+
+    },
+
+
+
+    //FileUpload
+    editSave() {
+      this.edit = false
+      let oldFile = this.files[0]
+      let binStr = atob(this.cropper.getCroppedCanvas().toDataURL(oldFile.type).split(',')[1])
+      let arr = new Uint8Array(binStr.length)
+
+      for (let i = 0; i < binStr.length; i++) {
+        arr[i] = binStr.charCodeAt(i)
+      }
+      let file = new File([arr], oldFile.name, { type: oldFile.type })
+      this.$refs.upload.update(oldFile.id, {
+        file,
+        type: file.type,
+        size: file.size,
+        active: true,
+      })
+
+      this.$http.post(this.$store.state.dataUrl+"/users/upload/avatar?id="+this.userData.id, arr).then(response => {
+        //notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'success',
+          title: 'Upload-avatar',
+          text: 'Avatar is uploaded successfully!'
+        })
+
+      }, response => {
+        // error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'Upload-avatar',
+          text: 'Avatar is not uploaded successfully!'
+        })
+      });
+    },
+    alert(message) {
+      alert(message)
+    },
+    inputFile(newFile, oldFile, prevent) {
+      if (newFile && !oldFile) {
+        this.$nextTick(function () {
+          this.edit = true
+        })
+      }
+      if (!newFile && oldFile) {
+        this.edit = false
+      }
+    },
+    inputFilter(newFile, oldFile, prevent) {
+      if (newFile && !oldFile) {
+        if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
+          this.alert('Your choice is not a picture')
+          return prevent()
+        }
+      }
+      if (newFile && (!oldFile || newFile.file !== oldFile.file)) {
+        newFile.url = ''
+        let URL = window.URL || window.webkitURL
+        if (URL && URL.createObjectURL) {
+          newFile.url = URL.createObjectURL(newFile.file)
+        }
+      }
+    }
+  },
+
+  //fileUpload
+  watch: {
+    edit(value) {
+      if (value) {
+        this.$nextTick(function () {
+          if (!this.$refs.editImage) {
+            return
+          }
+          let cropper = new Cropper(this.$refs.editImage, {
+            aspectRatio: 1 / 1,
+            viewMode: 1,
+          })
+          this.cropper = cropper
+        })
+      } else {
+        if (this.cropper) {
+          this.cropper.destroy()
+          this.cropper = false
+        }
+      }
     }
   },
 
   created () {
     const user = this.$store.state.userLoggedIn;
+    if(user.id){
+      this.userData.id = user.id;
+    }
     if(user.email){
       this.userData.email = user.email;
     }
@@ -207,18 +389,24 @@ export default {
     if(user.currentRole){
       this.userData.currentRole = user.currentRole;
     }
+    if(user.gender){
+      this.userData.gender = user.gender;
+    }
+    if(user.almaMater){
+      this.userData.almaMater = user.almaMater;
+    }
     if(user.phone){
       this.userData.phone = user.phone;
     }
-    if(user.avatar){
-      this.userData.avatar = user.avatar;
-    }
+    // if(user.avatar){
+    //   this.userData.avatar = user.avatar;
+    // }
     if(user.studentId){
       this.userData.studentId = user.studentId;
     }
-    if(user.certificate){
-      this.userData.certificate = user.certificate;
-    }
+    // if(user.certificate){
+    //   this.userData.certificate = user.certificate;
+    // }
     if(user.tags){
       this.userData.tags = user.tags;
     }
@@ -226,9 +414,59 @@ export default {
       this.userData.verified = user.verified;
     }
     if(user.car){
-      this.userData.car = user.car;
+      if(user.car.seats){
+        for (let i = 0; i < user.car.seats.length; i++){
+          this.vacantSeats.push(user.car.seats[i].position);
+        }
+      }else{
+        // this.vacantSeats = ['Front-right', 'Back-left', 'Back-right'];
+      }
+    }else {
+      this.vacantSeats = ['Front-right', 'Back-left', 'Back-right'];
     }
   },
 
 }
 </script>
+
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css" />
+<style src="cropperjs/dist/cropper.css" />
+<style src="@/vendor/libs/vue-multiselect/vue-multiselect.scss" lang="scss"></style>
+<style src="@/vendor/styles/pages/account.scss" lang="scss"></style>
+<style>
+.example-avatar .avatar-upload .rounded-circle {
+  width: 30px;
+  height: 30px;
+}
+.example-avatar .text-center .btn {
+  margin: 0 .5rem
+}
+.example-avatar .avatar-edit-image {
+  max-width: 50%
+}
+.example-avatar .drop-active {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: fixed;
+  z-index: 9999;
+  opacity: .6;
+  text-align: center;
+  background: #000;
+}
+.example-avatar .drop-active h3 {
+  margin: -.5em 0 0;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  font-size: 40px;
+  color: #fff;
+  padding: 0;
+}
+</style>
