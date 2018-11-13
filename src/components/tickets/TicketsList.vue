@@ -89,8 +89,8 @@
               <!-- <a href="javascript:void(0)" class="far fa-user ticket-assignee-add d-block ui-w-35 rounded-circle"></a> -->
 
 
-              <b-btn v-if="seat.reserved" variant="outline-success btn-sm icon-btn md-btn-flat" v-b-tooltip.hover.bottom :title="'Position: '+seat.position+' reserved by '+seat.passenger.firstName+' '+seat.passenger.lastName" @click.stop="releaseSeat(seat)"><i class="fas fa-user-alt"></i></b-btn>
-              <b-btn v-if="!seat.reserved" variant="outline-success btn-sm icon-btn md-btn-flat" v-b-tooltip.hover.bottom :title="'Position: '+seat.position" @click.stop="reserveSeat(seat)"><i class="far fa-user"></i></b-btn>
+              <b-btn v-if="seat.reserved" variant="outline-success btn-sm icon-btn md-btn-flat" v-b-tooltip.hover.bottom :title="seat.position+', reserved by '+seat.passenger.firstName+' '+seat.passenger.lastName" @click.stop="releaseSeat(data.item, i)"><i class="fas fa-user-alt"></i></b-btn>
+              <b-btn v-if="!seat.reserved" variant="outline-success btn-sm icon-btn md-btn-flat" v-b-tooltip.hover.bottom :title="'Position: '+seat.position" @click.stop="reserveSeat(data.item, i)"><i class="far fa-user"></i></b-btn>
             </div>
           </template>
 
@@ -154,7 +154,7 @@ export default {
     perPage: 10,
 
     fields: [
-      { key: 'id', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
+      //{ key: 'id', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
       //{ key: 'departureCity', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
       { key: 'departureLocation', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
       //{ key: 'arrivalCity', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
@@ -205,14 +205,66 @@ export default {
       this.ticketsData = filtered
     },
 
-    reserveSeat(seat){
-      seat.reserved = !seat.reserved;
-      //post to server to add/remove passenger to the seat
+    reserveSeat(order, i){
+      //change the reserved status in order to change icon
+      order.driver.car.seats[i].reserved = !order.driver.car.seats[i].reserved;
+      //modify order
+      order.driver.car.seats[i].reserved = true;
+      order.driver.car.seats[i].passenger = this.$store.state.userLoggedIn;
+      order.driver.car.seats[i].rated = false;
 
+      //post to server to update the order
+      let url = this.$store.state.dataUrl+'/orders/update/'+ order.id;
+      this.$http.put(url, order).then(response => {
+        //notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'success',
+          title: 'Seat-reserve',
+          text: 'Seat is reserved successfully!'
+        })
+        //redirect
+        //this.$router.push('/tickets/list');
+      }, response => {
+        //error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'Seat-reserve',
+          text: 'Seat is not reserved successfully!'
+        })
+      });
     },
-    releaseSeat(seat){
-      seat.reserved = !seat.reserved;
-      //post to server to add/remove passenger to the seat
+    releaseSeat(order, i){
+      order.driver.car.seats[i].reserved = !order.driver.car.seats[i].reserved;
+      //post to server to remove a passenger from the seat
+
+      //modify order
+      order.driver.car.seats[i].reserved = null;
+      order.driver.car.seats[i].passenger = null;
+      order.driver.car.seats[i].rated = null;
+
+      //post to server to update the order
+      let url = this.$store.state.dataUrl+'/orders/update/'+ order.id;
+      this.$http.put(url, order).then(response => {
+        //notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'success',
+          title: 'Seat-cancel reservation',
+          text: 'Seat reservation is cancelled successfully!'
+        })
+        //redirect
+        //this.$router.push('/tickets/list');
+      }, response => {
+        //error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'Seat-cancel reservation',
+          text: 'Seat reservation is not cancelled successfully!'
+        })
+      });
 
     },
 

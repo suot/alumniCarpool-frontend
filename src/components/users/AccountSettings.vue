@@ -297,7 +297,13 @@ export default {
         active: true,
       })
 
-      this.$http.post(this.$store.state.dataUrl+"/users/upload/avatar?id="+this.userData.id, arr).then(response => {
+
+
+      let formData = new FormData();
+      formData.append('file', this.files[0]);
+      let headers = {'Content-Type': 'multipart/form-data'};
+
+      this.$http.post(this.$store.state.dataUrl+"/users/upload/avatar?id="+this.userData.id, formData, {headers}).then(response => {
         //notification
         this.$notify({
           group: 'alumniCarpoolNotification',

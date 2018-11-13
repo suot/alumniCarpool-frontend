@@ -17,13 +17,13 @@
 
       <sidenav-divider class="mb-1"/>
       <sidenav-header class="small font-weight-semibold">611-Alumni Carpool</sidenav-header>
-      <sidenav-router-link icon="ion ion-md-quote" to="/tickets/list" :exact="true">Tickets</sidenav-router-link>
-      <sidenav-router-link icon="ion ion-md-quote" to="/postings/list" :exact="true">Postings</sidenav-router-link>
+      <sidenav-router-link icon="ion ion-md-car" to="/tickets/list" :exact="true">Tickets</sidenav-router-link>
+      <sidenav-router-link icon="ion ion-md-megaphone" to="/postings/list" :exact="true">Postings</sidenav-router-link>
 
       <sidenav-divider class="mb-1"/>
       <sidenav-header class="small font-weight-semibold">654-CPI Search Engine</sidenav-header>
       <sidenav-router-link icon="ion ion-md-quote" to="/search/search-results" :exact="true">Search</sidenav-router-link>
-      <sidenav-router-link icon="ion ion-md-quote" to="/search/upload-files" :exact="true">Upload</sidenav-router-link>
+      <sidenav-router-link icon="ion ion-md-document" to="/search/upload-files" :exact="true">Upload</sidenav-router-link>
 
     </div>
   </sidenav>
