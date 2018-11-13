@@ -61,24 +61,46 @@
           :per-page="perPage"
           class="card-table">
 
+          <template slot="driver" slot-scope="data">
+            <div v-if="data.item.driver" class="ui-feed-icon-container d-inline-block mr-2">
+              <img :src="`${baseUrl}img/avatars/1.png`" v-b-tooltip.hover :title="data.item.driver.firstName+', '+data.item.driver.phone+', '+data.item.driver.almaMater+', '+data.item.driver.tags+'.'" class="d-block ui-w-30 rounded-circle">
+            </div>
+          </template>
+
+          <!-- <template slot="driversAlmaMater" slot-scope="data">
+            <div class="ui-feed-icon-container d-inline-block mr-1 mb-1">
+              <img :src="`${baseUrl}img/university/`+data.item.driver.almaMater+'.png'" v-b-tooltip.hover :title="'Alma mater: '+data.item.driver.almaMater" class="d-block ui-w-30 rounded-circle">
+            </div>
+          </template> -->
+
+
+          <template slot="car" slot-scope="data">
+            <div v-if="data.item.driver.car" class="ui-feed-icon-container d-inline-block mr-2">
+              <img :src="`${baseUrl}img/car.png`" v-b-tooltip.hover :title="'Plate number: '+data.item.driver.car.plateNum" class="d-block ui-w-30 rounded-circle">
+            </div>
+          </template>
+
+
           <template slot="seats" slot-scope="data">
             <!-- <b-btn v-for="seat in seats" variant="default btn-xs icon-btn md-btn-flat" v-b-tooltip.hover title="Occupy" @click.stop="occupySeat()"><i class="ion ion-md-person-add"></i></b-btn> -->
+            <div v-for="(seat, i) in data.item.driver.car.seats" :key="i" class="ui-feed-icon-container d-inline-block mr-2">
+              <!-- <a @click.prevent="seats.splice(i, 1)" href="#" class="ui-icon ui-feed-icon ion ion-ios-close bg-secondary text-white"></a> -->
+              <!-- <img :src="`${baseUrl}img/avatars/1.png`" v-b-tooltip.hover :title="seat" class="ticket-assignee d-block ui-w-35 rounded-circle"> -->
+              <!-- <a href="javascript:void(0)" class="far fa-user ticket-assignee-add d-block ui-w-35 rounded-circle"></a> -->
 
-            <div v-for="(seat, i) in seats" :key="i" class="ui-feed-icon-container d-inline-block mr-1 mb-1">
-              <a @click.prevent="seats.splice(i, 1)" href="#" class="ui-icon ui-feed-icon ion ion-ios-close bg-secondary text-white"></a>
-              <img :src="`${baseUrl}img/avatars/1.png`" v-b-tooltip.hover :title="seat" class="ticket-assignee d-block ui-w-50 rounded-circle">
+
+              <b-btn v-if="seat.reserved" variant="outline-success btn-sm icon-btn md-btn-flat" v-b-tooltip.hover.bottom :title="'Position: '+seat.position+' reserved by '+seat.passenger.firstName+' '+seat.passenger.lastName" @click.stop="releaseSeat(seat)"><i class="fas fa-user-alt"></i></b-btn>
+              <b-btn v-if="!seat.reserved" variant="outline-success btn-sm icon-btn md-btn-flat" v-b-tooltip.hover.bottom :title="'Position: '+seat.position" @click.stop="reserveSeat(seat)"><i class="far fa-user"></i></b-btn>
             </div>
-
-            <!-- <a href="javascript:void(0)" class="ticket-assignee-add bg-lighter text-muted mb-3">
-              <span class="ion ion-md-add"></span>
-            </a> -->
-
           </template>
 
           <template slot="action" slot-scope="data">
-            <b-btn variant="outline-success btn-xs icon-btn md-btn-flat" v-b-tooltip.hover title="Depart" @click.stop="startJourney(data.item)"><i class="ion ion-md-paper-plane"></i></b-btn>
-            &nbsp;
-            <b-btn variant="outline-warning btn-xs icon-btn md-btn-flat" v-b-tooltip.hover title="Delete" @click.stop="deleteTicket(data.item)"><i class="ion ion-md-trash"></i></b-btn>
+            <div class="ui-feed-icon-container d-inline-block mr-2">
+              <b-btn variant="outline-warning btn-sm icon-btn md-btn-flat" v-b-tooltip.hover title="Depart" @click.stop="startJourney(data.item)"><i class="ion ion-md-paper-plane"></i></b-btn>
+            </div>
+            <div class="ui-feed-icon-container d-inline-block mr-2">
+              <b-btn variant="outline-warning btn-sm icon-btn md-btn-flat" v-b-tooltip.hover title="Delete" @click.stop="deleteTicket(data.item)"><i class="ion ion-md-trash"></i></b-btn>
+            </div>
           </template>
         </b-table>
 
@@ -140,6 +162,9 @@ export default {
       //{ key: 'departureDate', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
       { key: 'departureTime', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
       { key: 'status', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
+      { key: 'driver', label: 'Driver', thClass: 'text-nowrap', tdClass: 'text-nowrap align-middle text-center py-3' },
+      { key: 'car', label: 'Car', thClass: 'text-nowrap', tdClass: 'text-nowrap align-middle text-center py-3' },
+      //{ key: 'driversAlmaMater', label: 'Driver\'s alma mater', thClass: 'text-nowrap', tdClass: 'text-nowrap align-middle text-center py-3' },
       { key: 'seats', label: 'Seats', thClass: 'text-nowrap', tdClass: 'text-nowrap align-middle text-center py-3' },
       { key: 'action', label: 'Action', thClass: 'text-nowrap', tdClass: 'text-nowrap align-middle text-center py-3' }
     ],
@@ -180,10 +205,17 @@ export default {
       this.ticketsData = filtered
     },
 
-    occupySeat(){
-
+    reserveSeat(seat){
+      seat.reserved = !seat.reserved;
+      //post to server to add/remove passenger to the seat
 
     },
+    releaseSeat(seat){
+      seat.reserved = !seat.reserved;
+      //post to server to add/remove passenger to the seat
+
+    },
+
 
     startJourney(row){
       row.status = "On-board";

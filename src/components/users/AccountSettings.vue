@@ -421,6 +421,12 @@ export default {
       }else{
         // this.vacantSeats = ['Front-right', 'Back-left', 'Back-right'];
       }
+
+      if(user.car.plateNum){
+        this.userData.car.plateNum = user.car.plateNum;
+      }else {
+        //default is ''
+      }
     }else {
       this.vacantSeats = ['Front-right', 'Back-left', 'Back-right'];
     }
