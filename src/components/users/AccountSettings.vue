@@ -278,7 +278,6 @@ export default {
     },
 
 
-
     //FileUpload
     editSave() {
       this.edit = false
@@ -298,12 +297,14 @@ export default {
       })
 
 
-
       let formData = new FormData();
-      formData.append('file', this.files[0]);
-      let headers = {'Content-Type': 'multipart/form-data'};
+      formData.append('file', file); //'file' here should be the same with backend API: Multipartfile file. this.files[0] is empty.
+      // let headers = {'Content-Type': 'multipart/form-data'};
+      console.log("file uploaded: " + file);
 
-      this.$http.post(this.$store.state.dataUrl+"/users/upload/avatar?id="+this.userData.id, formData, {headers}).then(response => {
+
+      this.$http.post(this.$store.state.dataUrl+"/users/upload/avatar?id="+this.userData.id, formData).then(response => {
+      //this.$http.post(this.$store.state.dataUrl+"/users/upload/avatar?id="+this.userData.id, formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(response => {
         //notification
         this.$notify({
           group: 'alumniCarpoolNotification',
@@ -321,6 +322,10 @@ export default {
           text: 'Avatar is not uploaded successfully!'
         })
       });
+
+
+
+
     },
     alert(message) {
       alert(message)
