@@ -10,6 +10,7 @@ import Notifications from 'vue-notification'
 import velocity from 'velocity-animate'
 
 
+
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)

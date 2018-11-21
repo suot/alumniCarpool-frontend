@@ -15,6 +15,7 @@
     "express": "^4.16.4",
     "numeral": "^2.0.6",
     "perfect-scrollbar": "^1.4.0",
+    "sweetalert2": "^7.29.1",
     "velocity-animate": "^1.5.2",
     "vue": "^2.5.17",
     "vue-flatpickr-component": "^8.0.0",

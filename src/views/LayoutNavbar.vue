@@ -153,8 +153,8 @@
         <b-nav-item-dropdown :right="!isRTL" class="demo-navbar-user">
           <template slot="button-content">
             <span class="d-inline-flex flex-lg-row-reverse align-items-center align-middle">
-              <img :src="`${baseUrl}img/avatars/1.png`" alt class="d-block ui-w-30 rounded-circle">
-              <span class="px-1 mr-lg-2 ml-2 ml-lg-0">{{ userData.lastName }}</span>
+              <img :src="remoteAvatar" alt class="d-block ui-w-30 rounded-circle">
+              <span class="px-1 mr-lg-2 ml-2 ml-lg-0">{{ userData.firstName }}</span>
             </span>
           </template>
 
@@ -183,6 +183,9 @@ export default {
   computed: {
     userData: function () {
       return this.$store.state.userLoggedIn
+    },
+    remoteAvatar: function () {
+      return this.$store.state.dataUrl + "\\images\\" + this.userData.id + "\\avatar.jpg"
     }
   },
 

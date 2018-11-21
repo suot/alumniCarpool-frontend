@@ -23,11 +23,10 @@
                 <div v-show="$refs.upload && $refs.upload.dropActive" class="drop-active">
                   <h3>Drop file to upload</h3>
                 </div>
-                <div class="avatar-upload"  v-show="!edit">
+                <div class="avatar-upload"  v-show="!edit_avatar">
                   <div class="text-center p-2">
                     <label for="avatar">
                       <img :src="files.length ? files[0].url : `${baseUrl}img/upload_file_none.png`"  class="rounded-circle" />
-                      <!-- <h6 class="pt-2">Drop file here to upload</h6> -->
                     </label>
                   </div>
                   <div class="text-center p-2">
@@ -36,23 +35,23 @@
                       accept="image/png,image/gif,image/jpeg"
                       name="avatar"
                       class="btn btn-primary"
-                      :drop="!edit"
+                      :drop="!edit_avatar"
                       v-model="files"
                       @input-filter="inputFilter"
-                      @input-file="inputFile"
+                      @input-file="inputFile_avatar"
                       ref="upload">
                       Select avatar
                     </file-upload>
                   </div>
                 </div>
 
-                <div class="avatar-edit" v-show="files.length && edit">
+                <div class="avatar-edit" v-show="files.length && edit_avatar">
                   <div class="avatar-edit-image" v-if="files.length">
                     <img ref="editImage" :src="files[0].url" />
                   </div>
                   <div class="text-center p-4">
                     <button type="button" class="btn btn-secondary" @click.prevent="$refs.upload.clear">Cancel</button>
-                    <button type="submit" class="btn btn-primary" @click.prevent="editSave">Save and upload</button>
+                    <button type="submit" class="btn btn-primary" @click.prevent="editSave_avatar">Save and upload</button>
                   </div>
                 </div>
               </div>
@@ -122,26 +121,48 @@
           <hr class="border-light m-0">
 
           <b-card-body class="pb-2">
-            <!-- <h6 class="mb-4">Alumni certificate</h6> -->
-
             <b-form-group label="Alma Mater">
-              <b-input v-model="userData.almaMater" />
+              <b-select v-model="userData.almaMater" :options="['UWindsor', 'UWaterloo', 'UToronto', 'McMasterU']"/>
             </b-form-group>
-
             <b-form-group label="Student ID">
               <b-input v-model="userData.studentId" />
             </b-form-group>
+          </b-card-body>
 
-            <!-- <img :src="`${baseUrl}img/avatars/${userData.avatar}`" alt="" class="d-block ui-w-80">&nbsp; -->
-            <b-form-group label="Upload certificate">
-              <!-- <b-input v-model="userData.certificate" /> -->
-              <div class="media-body ml-4">
-                <b-btn variant="outline-primary">Upload certificate</b-btn> &nbsp;
-                <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+          <b-card-body class="media align-items-center">
+            <div class="example-avatar">
+                <div class="avatar-upload"  v-show="!edit_certificate">
+                  <div class="text-center p-2">
+                    <label for="avatar">
+                      <img :src="files_certificate.length ? files_certificate[0].url : `${baseUrl}img/upload_file_none.png`"  class="rounded-circle" />
+                    </label>
+                  </div>
+                  <div class="text-center p-2">
+                    <file-upload
+                      extensions="gif,jpg,jpeg,png"
+                      accept="image/png,image/gif,image/jpeg"
+                      name="car"
+                      class="btn btn-primary"
+                      :drop="!edit_certificate"
+                      v-model="files_certificate"
+                      @input-filter="inputFilter"
+                      @input-file="inputFile_certificate"
+                      ref="upload">
+                      Select your cerficate
+                    </file-upload>
+                  </div>
+                </div>
+
+                <div class="avatar-edit" v-show="files_certificate.length && edit_certificate">
+                  <div class="avatar-edit-image" v-if="files_certificate.length">
+                    <img ref="editImage" :src="files_certificate[0].url" />
+                  </div>
+                  <div class="text-center p-4">
+                    <button type="button" class="btn btn-secondary" @click.prevent="$refs.upload.clear">Cancel</button>
+                    <button type="submit" class="btn btn-primary" @click.prevent="editSave_certificate">Save and upload</button>
+                  </div>
+                </div>
               </div>
-            </b-form-group>
-
-
           </b-card-body>
         </div>
 
@@ -150,17 +171,45 @@
             <b-form-group label="Plate Number">
               <b-input v-model="userData.car.plateNum" />
             </b-form-group>
-
-            <b-form-group label="Upload your car photo">
-              <div class="media-body ml-4">
-                <b-btn variant="outline-primary">Upload car photo</b-btn> &nbsp;
-                <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
-              </div>
-            </b-form-group>
-
             <b-form-group label="Seats">
               <input-tag placeholder="Add seats" v-model="vacantSeats"></input-tag>
             </b-form-group>
+          </b-card-body>
+
+          <b-card-body class="media align-items-center">
+            <div class="example-avatar">
+                <div class="avatar-upload"  v-show="!edit_car">
+                  <div class="text-center p-2">
+                    <label for="avatar">
+                      <img :src="files_car.length ? files_car[0].url : `${baseUrl}img/upload_file_none.png`"  class="rounded-circle" />
+                    </label>
+                  </div>
+                  <div class="text-center p-2">
+                    <file-upload
+                      extensions="gif,jpg,jpeg,png"
+                      accept="image/png,image/gif,image/jpeg"
+                      name="car"
+                      class="btn btn-primary"
+                      :drop="!edit_car"
+                      v-model="files_car"
+                      @input-filter="inputFilter"
+                      @input-file="inputFile_car"
+                      ref="upload">
+                      Select car photo
+                    </file-upload>
+                  </div>
+                </div>
+
+                <div class="avatar-edit" v-show="files_car.length && edit_car">
+                  <div class="avatar-edit-image" v-if="files_car.length">
+                    <img ref="editImage" :src="files_car[0].url" />
+                  </div>
+                  <div class="text-center p-4">
+                    <button type="button" class="btn btn-secondary" @click.prevent="$refs.upload.clear">Cancel</button>
+                    <button type="submit" class="btn btn-primary" @click.prevent="editSave_car">Save and upload</button>
+                  </div>
+                </div>
+              </div>
           </b-card-body>
         </div>
       </div>
@@ -222,7 +271,11 @@ export default {
 
     //fileUpload
     files: [],
-    edit: false,
+    files_car: [],
+    files_certificate: [],
+    edit_avatar: false,
+    edit_certificate: false,
+    edit_car: false,
     cropper: false,
 
   }),
@@ -278,9 +331,9 @@ export default {
     },
 
 
-    //FileUpload
-    editSave() {
-      this.edit = false
+    //FileUpload_avatar
+    editSave_avatar() {
+      this.edit_avatar = false
       let oldFile = this.files[0]
       let binStr = atob(this.cropper.getCroppedCanvas().toDataURL(oldFile.type).split(',')[1])
       let arr = new Uint8Array(binStr.length)
@@ -300,11 +353,16 @@ export default {
       let formData = new FormData();
       formData.append('file', file); //'file' here should be the same with backend API: Multipartfile file. this.files[0] is empty.
       // let headers = {'Content-Type': 'multipart/form-data'};
-      console.log("file uploaded: " + file);
+      //console.log(file);
 
 
       this.$http.post(this.$store.state.dataUrl+"/users/upload/avatar?id="+this.userData.id, formData).then(response => {
-      //this.$http.post(this.$store.state.dataUrl+"/users/upload/avatar?id="+this.userData.id, formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(response => {
+        //update avatar
+        // let user = this.$store.state.userLoggedIn;
+        // user.avatar = this.$store.state.dataUrl + "\\images\\" + user.id + "\\avatar.jpg";
+        // this.$store.commit('update_userLoggedIn', user);
+        // console.log(user.avatar);
+
         //notification
         this.$notify({
           group: 'alumniCarpoolNotification',
@@ -322,24 +380,138 @@ export default {
           text: 'Avatar is not uploaded successfully!'
         })
       });
+    },
 
 
+    //FileUpload_car
+    editSave_car() {
+      this.edit_car = false
+      let oldFile = this.files_car[0]
+      let binStr = atob(this.cropper.getCroppedCanvas().toDataURL(oldFile.type).split(',')[1])
+      let arr = new Uint8Array(binStr.length)
 
+      for (let i = 0; i < binStr.length; i++) {
+        arr[i] = binStr.charCodeAt(i)
+      }
+      let file = new File([arr], oldFile.name, { type: oldFile.type })
+      this.$refs.upload.update(oldFile.id, {
+        file,
+        type: file.type,
+        size: file.size,
+        active: true,
+      })
 
+      let formData = new FormData();
+      formData.append('file', file);
+
+      this.$http.post(this.$store.state.dataUrl+"/users/upload/car?id="+this.userData.id, formData).then(response => {
+        //update avatar
+        // let user = this.$store.state.userLoggedIn;
+        // user.avatar = this.$store.state.dataUrl + "\\images\\" + user.id + "\\avatar.jpg";
+        // this.$store.commit('update_userLoggedIn', user);
+        // console.log(user.avatar);
+
+        //notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'success',
+          title: 'Upload-car',
+          text: 'Car is uploaded successfully!'
+        })
+
+      }, response => {
+        // error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'Upload-car',
+          text: 'Car is not uploaded successfully!'
+        })
+      });
+    },
+
+    //FileUpload_certificate
+    editSave_certificate() {
+      this.edit_certificate = false
+      let oldFile = this.files_certificate[0]
+      let binStr = atob(this.cropper.getCroppedCanvas().toDataURL(oldFile.type).split(',')[1])
+      let arr = new Uint8Array(binStr.length)
+
+      for (let i = 0; i < binStr.length; i++) {
+        arr[i] = binStr.charCodeAt(i)
+      }
+      let file = new File([arr], oldFile.name, { type: oldFile.type })
+      this.$refs.upload.update(oldFile.id, {
+        file,
+        type: file.type,
+        size: file.size,
+        active: true,
+      })
+
+      let formData = new FormData();
+      formData.append('file', file);
+
+      this.$http.post(this.$store.state.dataUrl+"/users/upload/certificate?id="+this.userData.id, formData).then(response => {
+        //update avatar
+        // let user = this.$store.state.userLoggedIn;
+        // user.avatar = this.$store.state.dataUrl + "\\images\\" + user.id + "\\avatar.jpg";
+        // this.$store.commit('update_userLoggedIn', user);
+        // console.log(user.avatar);
+
+        //notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'success',
+          title: 'Upload-certificate',
+          text: 'Certificate is uploaded successfully!'
+        })
+
+      }, response => {
+        // error callback, notification
+        this.$notify({
+          group: 'alumniCarpoolNotification',
+          type: 'error',
+          title: 'Upload-certificate',
+          text: 'Certificate is not uploaded successfully!'
+        })
+      });
     },
     alert(message) {
       alert(message)
     },
-    inputFile(newFile, oldFile, prevent) {
+    inputFile_avatar(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
         this.$nextTick(function () {
-          this.edit = true
+          this.edit_avatar = true
         })
       }
       if (!newFile && oldFile) {
-        this.edit = false
+        this.edit_avatar = false
       }
     },
+    inputFile_car(newFile, oldFile, prevent) {
+      if (newFile && !oldFile) {
+        this.$nextTick(function () {
+          this.edit_car = true
+        })
+      }
+      if (!newFile && oldFile) {
+        this.edit_car = false
+      }
+    },
+    inputFile_certificate(newFile, oldFile, prevent) {
+      if (newFile && !oldFile) {
+        this.$nextTick(function () {
+          this.edit_certificate = true
+        })
+      }
+      if (!newFile && oldFile) {
+        this.edit_certificate = false
+      }
+    },
+
+
+
     inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
         if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
@@ -359,7 +531,45 @@ export default {
 
   //fileUpload
   watch: {
-    edit(value) {
+    edit_avatar(value) {
+      if (value) {
+        this.$nextTick(function () {
+          if (!this.$refs.editImage) {
+            return
+          }
+          let cropper = new Cropper(this.$refs.editImage, {
+            aspectRatio: 1 / 1,
+            viewMode: 1,
+          })
+          this.cropper = cropper
+        })
+      } else {
+        if (this.cropper) {
+          this.cropper.destroy()
+          this.cropper = false
+        }
+      }
+    },
+    edit_certificate(value) {
+      if (value) {
+        this.$nextTick(function () {
+          if (!this.$refs.editImage) {
+            return
+          }
+          let cropper = new Cropper(this.$refs.editImage, {
+            aspectRatio: 1 / 1,
+            viewMode: 1,
+          })
+          this.cropper = cropper
+        })
+      } else {
+        if (this.cropper) {
+          this.cropper.destroy()
+          this.cropper = false
+        }
+      }
+    },
+    edit_car(value) {
       if (value) {
         this.$nextTick(function () {
           if (!this.$refs.editImage) {

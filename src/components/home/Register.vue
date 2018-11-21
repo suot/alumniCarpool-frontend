@@ -32,6 +32,10 @@
             <b-form-group label="Password">
               <b-input type="password" v-model="user.password" />
             </b-form-group>
+            <b-form-group label="Default Role">
+              <b-select v-model="user.currentRole" :options="['Passenger', 'Driver']"/>
+            </b-form-group>
+
             <b-btn variant="primary" class="mt-4" @click="createUser()">Sign Up</b-btn>
             <div class="text-light small mt-4">
               By clicking "Sign Up", you agree to our
@@ -67,7 +71,8 @@ export default {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
+      currentRole: '',
     }
 
   }),

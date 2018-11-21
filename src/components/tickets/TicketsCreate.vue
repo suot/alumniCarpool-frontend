@@ -83,7 +83,7 @@ export default {
   data: () => ({
     order: {
       driver: {},
-      status: "Vacant",
+      status: "Boarding",
       departureCity: "",
       departureLocation: "",
       arrivalCity: "",
@@ -99,7 +99,7 @@ export default {
     createTicket(){
       //add driver to the created orders
       this.order.driver = this.$store.state.userLoggedIn;
-      
+
       this.$http.post(this.$store.state.dataUrl+'/orders/create', this.order).then(response => {
         //notification
         this.$notify({
