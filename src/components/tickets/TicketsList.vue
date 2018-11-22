@@ -262,8 +262,6 @@ export default {
       });
     },
 
-
-
     filter (value) {
       const val = value.toLowerCase()
       const filtered = this.originalTicketsData.filter(d => {
@@ -419,7 +417,6 @@ export default {
             })
         }
     },
-
 
     deleteTicket(row){
       this.$http.delete(this.$store.state.dataUrl+'/orders/delete/'+row.id).then(response => {

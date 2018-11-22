@@ -538,8 +538,8 @@ export default {
             return
           }
           let cropper = new Cropper(this.$refs.editImage, {
-            aspectRatio: 1 / 1,
-            viewMode: 1,
+            // aspectRatio: 1 / 1,
+            // viewMode: 1,
           })
           this.cropper = cropper
         })
@@ -557,8 +557,8 @@ export default {
             return
           }
           let cropper = new Cropper(this.$refs.editImage, {
-            aspectRatio: 1 / 1,
-            viewMode: 1,
+            // aspectRatio: 1 / 1,
+            // viewMode: 1,
           })
           this.cropper = cropper
         })
@@ -576,8 +576,6 @@ export default {
             return
           }
           let cropper = new Cropper(this.$refs.editImage, {
-            aspectRatio: 1 / 1,
-            viewMode: 1,
           })
           this.cropper = cropper
         })
@@ -661,6 +659,7 @@ export default {
 <style src="cropperjs/dist/cropper.css" />
 <style src="@/vendor/libs/vue-multiselect/vue-multiselect.scss" lang="scss"></style>
 <style src="@/vendor/styles/pages/account.scss" lang="scss"></style>
+
 <style>
 .example-avatar .avatar-upload .rounded-circle {
   width: 30px;

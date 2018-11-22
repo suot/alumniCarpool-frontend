@@ -58,8 +58,8 @@ export default new Router({
           component: () => import('@/components/tickets/TicketsList')
         },
         {
-          path: 'my-used-tickets',
-          component: () => import('@/components/tickets/TicketsUsed')
+          path: 'my-finished-tickets',
+          component: () => import('@/components/tickets/TicketsFinished')
         },
         {
           path: 'create',
