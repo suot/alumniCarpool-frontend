@@ -14,6 +14,9 @@
         <swiper :options="swiperOption" v-else>
             <swiper-slide v-for="order in slides_driver">
                 <md-card>
+
+                  <md-card-area>
+
                     <md-card-media md-ratio="16:9">
                       <img :src="getImage(order.driver.id, 'car')" alt="Driver \'s car">
                     </md-card-media>
@@ -29,21 +32,38 @@
                           <i class="pe-7s-alarm small"></i>
                           <span>  {{order.departureTime}}  {{order.departureDate}}</span>
                       </div>
+
+                      <div class="md-subhead">
+                          <span>{{order.departureLocation}}    </span>
+                          <i class="pe-7s-angle-right small"></i>
+                          <span>  {{order.arrivalLocation}}</span>
+                      </div>
                     </md-card-header>
 
                     <md-card-header>
                         <md-avatar>
-                            <img :src="getImage(order.driver.id, 'avatar')" alt="Avatar">
+                            <img :src="getImage(order.driver.id, 'avatar')" alt="Avatar" v-b-tooltip.hover :title="Driver">
                         </md-avatar>
                         <div class="md-subheading">{{order.driver.firstName}} {{order.driver.lastName}}</div>
                         <div class="md-subhead">{{order.driver.phone}}</div>
                     </md-card-header>
 
+                    <md-card-actions md-alignment="left">
+                      <md-button>Action</md-button>
+                      <md-button @click.stop="rate(order.driver)">Rate the driver</md-button>
+                    </md-card-actions>
+
+                  </md-card-area>
+
+                  <md-card-area>
                     <md-card-header>
                         <md-avatar v-for="(seat,j) in order.driver.car.seats" :key="j" v-if="seat.reserved">
-                            <img :src="getImage(seat.passenger.id, 'avatar')" alt="Avatar" >
+                            <img :src="getImage(seat.passenger.id, 'avatar')" alt="Avatar" :title="seat.passenger.firstName +' '+seat.passenger.lastName+' in '+seat.position">
                         </md-avatar>
                     </md-card-header>
+
+                  </md-card-area>
+
 
 
 
@@ -103,6 +123,7 @@ export default {
       getImage(driverId, imageName){
         return this.$store.state.dataUrl + "\\images\\" + driverId + "\\" + imageName + ".jpg";
       },
+
       getReservedSeat(order){
         let passengers = {};
         let seats = order.driver.car.seats
@@ -112,10 +133,18 @@ export default {
             passengers.put(seat.passenger);
           }
         }
+      },
 
+      rate(driver){
+        let user = driver;
+        for(let seat in driver.car.seats){
+          if(true){
 
-      }
+          }
+        }
+      },
     },
+
 
     created () {
         const user = this.$store.state.userLoggedIn;

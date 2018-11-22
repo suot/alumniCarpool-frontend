@@ -10,19 +10,19 @@
       <div class="form-row align-items-center">
         <div class="col-md mb-4">
           <label class="form-label">Departure City</label>
-          <b-select v-model="filterFrom" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
+          <b-select v-model="departure_from" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
         </div>
         <div class="col-md mb-4">
           <label class="form-label">Arrival City</label>
-          <b-select v-model="filterTo" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
+          <b-select v-model="departure_to" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
         </div>
         <div class="col-md mb-4">
           <label class="form-label">Departure Date</label>
-          <flat-pickr v-model="filterDepartureDate" :config="{ altInput: true, animate: !isRTL, dateFormat: 'm/d/Y', altFormat: 'm/d/Y', mode: 'single' }" :placeholder="!isIEMode ? 'Select a date' : null" />
+          <flat-pickr v-model="departureDate" :config="{ altInput: true, animate: !isRTL, dateFormat: 'm/d/Y', altFormat: 'm/d/Y', mode: 'single' }" :placeholder="!isIEMode ? 'Select a date' : null" />
         </div>
         <div class="col-md col-xl-2 mb-4">
           <label class="form-label d-none d-md-block">&nbsp;</label>
-          <b-btn variant="primary" :block="true" @click="show(filterFrom, filterTo, filterDepartureDate)">Show</b-btn>
+          <b-btn variant="primary" :block="true" @click="show(departure_from, departure_to, departureDate)">Show</b-btn>
         </div>
       </div>
     </div>
@@ -152,10 +152,11 @@ export default {
   },
   data: () => ({
     // Options
-    searchKeys: ['id'],
-    sortBy: 'id',
+    searchKeys: ['departureLocation', 'arrivalLocation', 'departureTime', 'status'],
+    sortBy: 'status',
     sortDesc: false,
     perPage: 10,
+    currentPage: 1,
 
     fields_passenger: [
       { key: 'departureLocation', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
@@ -181,16 +182,12 @@ export default {
       { key: 'action', label: 'Action', thClass: 'text-nowrap', tdClass: 'text-nowrap align-middle text-center py-3' }
     ],
 
-    // Filters
-    filterFrom: 'Any',
-    filterTo: 'Any',
-    filterDepartureDate: null,
+    departure_from: 'Any',
+    departure_to: 'Any',
+    departureDate: null,
 
     ticketsData: [],
     originalTicketsData: [],
-
-    currentPage: 1,
-
     seats: []
   }),
 
@@ -455,7 +452,6 @@ export default {
         const data = JSON.parse(req.response)
         this.ticketsData = data
         this.originalTicketsData = data.slice(0)
-        console.log(this.ticketsData);
       }
       req.send()
     }

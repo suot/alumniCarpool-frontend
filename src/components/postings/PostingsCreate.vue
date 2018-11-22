@@ -80,9 +80,9 @@ export default {
     flatPickr,
   },
 
-  data: () => ({  
+  data: () => ({
     posting: {
-      passenger: {},
+      creator: {},
       departureCity: "",
       departureLocation: "",
       arrivalCity: "",
@@ -96,6 +96,7 @@ export default {
 
   methods: {
     createPosting(){
+      this.posting.creator = this.$store.state.userLoggedIn;
       this.$http.post(this.$store.state.dataUrl+"/postings/create", this.posting).then(response => {
         //notification
         this.$notify({

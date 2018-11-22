@@ -10,19 +10,19 @@
       <div class="form-row align-items-center">
         <div class="col-md mb-4">
           <label class="form-label">Departure City</label>
-          <b-select v-model="filterFrom" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
+          <b-select v-model="departure_from" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
         </div>
         <div class="col-md mb-4">
           <label class="form-label">Arrival City</label>
-          <b-select v-model="filterTo" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
+          <b-select v-model="departure_to" :options="['Windsor', 'Waterloo', 'Toronto', 'Markham']" />
         </div>
         <div class="col-md mb-4">
           <label class="form-label">Departure Date</label>
-          <flat-pickr v-model="filterDepartureDate" :config="{ altInput: true, animate: !isRTL, dateFormat: 'm/d/Y', altFormat: 'm/d/Y', mode: 'single' }" :placeholder="!isIEMode ? 'Select a date' : null" />
+          <flat-pickr v-model="departureDate" :config="{ altInput: true, animate: !isRTL, dateFormat: 'm/d/Y', altFormat: 'm/d/Y', mode: 'single' }" :placeholder="!isIEMode ? 'Select a date' : null" />
         </div>
         <div class="col-md col-xl-2 mb-4">
           <label class="form-label d-none d-md-block">&nbsp;</label>
-          <b-btn variant="primary" :block="true" @click="show(filterFrom, filterTo, filterDepartureDate)">Show</b-btn>
+          <b-btn variant="primary" :block="true" @click="show(departure_from, departure_to, departureDate)">Show</b-btn>
         </div>
       </div>
     </div>
@@ -61,18 +61,13 @@
           :per-page="perPage"
           class="card-table">
 
-          <template slot="passenger" slot-scope="data">
-            <!-- <b-btn v-for="seat in passenger" variant="default btn-xs icon-btn md-btn-flat" v-b-tooltip.hover title="Occupy" @click.stop="occupySeat()"><i class="ion ion-md-person-add"></i></b-btn> -->
-            <!-- <div v-for="(seat, i) in passenger" :key="i" class="ui-feed-icon-container d-inline-block mr-1 mb-1">
-              <a @click.prevent="passenger.splice(i, 1)" href="#" class="ui-icon ui-feed-icon ion ion-ios-close bg-secondary text-white"></a>
-              <img :src="`${baseUrl}img/avatars/1.png`" v-b-tooltip.hover :title="seat" class="ticket-assignee d-block ui-w-30 rounded-circle">
-            </div> -->
-            <!-- <a href="javascript:void(0)" class="ticket-assignee-add bg-lighter text-muted mb-3">
-              <span class="ion ion-md-add"></span>
-            </a> -->
+          <template slot="creator" slot-scope="data">
+            <div v-if="data.value" class="ui-feed-icon-container d-inline-block mr-2">
+              <img :src="getImage(data.value.id, 'avatar')" @click.stop="showModal_avatar(data.value)" v-b-tooltip.hover :title="data.value.firstName+' '+data.value.lastName" class="d-block ui-w-30 rounded-circle">
+            </div>
           </template>
 
-          <template slot="action" slot-scope="data">
+          <template slot="action" slot-scope="data" v-if="data.item.creator.id===currentUser.id">
             <b-btn variant="outline-warning btn-xs icon-btn md-btn-flat" v-b-tooltip.hover title="Delete" @click.stop="deletePosting(data.item)"><i class="ion ion-md-trash"></i></b-btn>
           </template>
         </b-table>
@@ -109,6 +104,7 @@
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css';
 import 'flatpickr/dist/themes/material_blue.css';
+import swal from 'sweetalert2';
 
 
 export default {
@@ -117,37 +113,32 @@ export default {
     title: 'Posting list'
   },
   components: {
-    flatPickr
+    flatPickr,
+    swal,
   },
   data: () => ({
     // Options
-    searchKeys: ['id'],
-    sortBy: 'id',
+    searchKeys: ['departureLocation', 'arrivalLocation', 'departureTime'],
+    sortBy: 'departureTime',
     sortDesc: false,
     perPage: 10,
+    currentPage: 1,
 
     fields: [
-      { key: 'id', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
-      //{ key: 'departureCity', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
       { key: 'departureLocation', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
-      //{ key: 'arrivalCity', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
       { key: 'arrivalLocation', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
-      //{ key: 'departureDate', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
       { key: 'departureTime', sortable: true, thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
+      { key: 'creator', sortable: true, label:'Creator', thClass: 'text-nowrap', tdClass: 'align-middle py-3' },
       { key: 'action', label: 'Action', thClass: 'text-nowrap', tdClass: 'text-nowrap align-middle text-center py-3' }
     ],
 
     // Filters
-    filterFrom: 'Any',
-    filterTo: 'Any',
-    filterDepartureDate: null,
+    departure_from: 'Any',
+    departure_to: 'Any',
+    departureDate: null,
 
     postingsData: [],
-    originalpostingsData: [],
-
-    currentPage: 1,
-
-    passenger: {},
+    originalPostingsData: [],
   }),
 
   computed: {
@@ -156,13 +147,45 @@ export default {
     },
     totalPages () {
       return Math.ceil(this.totalItems / this.perPage)
+    },
+    currentUser () {
+      return this.$store.state.userLoggedIn
     }
   },
 
   methods: {
+    showModal_avatar(creator){
+        let url = this.getImage(creator.id, 'avatar');
+        let name = creator.firstName + " " + creator.lastName;
+        let phone = creator.phone;
+        let badges = "";
+        let tags = creator.tags;
+
+        for(let i in tags){
+          badges += '<button class="d-inline-block mr-2" style="border-color: transparent; background: #26B4FF; color: #fff;">' + tags[i] + '</button>';
+        }
+
+        swal({
+            title: name,
+            text: phone,
+            imageUrl: url,
+            // imageWidth: 400,
+            // imageHeight: 200,
+            imageAlt: 'Creator \'s avatar',
+            showConfirmButton: false,
+            footer: badges,
+            buttonsStyling: false,
+            animation: true,
+        });
+    },
+
+    getImage(driverId, imageName){
+      return this.$store.state.dataUrl + "\\images\\" + driverId + "\\" + imageName + ".jpg";
+    },
+
     filter (value) {
       const val = value.toLowerCase()
-      const filtered = this.originalpostingsData.filter(d => {
+      const filtered = this.originalPostingsData.filter(d => {
         return Object.keys(d)
           .filter(k => this.searchKeys.includes(k))
           .map(k => String(d[k]))
@@ -175,6 +198,8 @@ export default {
 
     deletePosting(row){
       this.$http.delete(this.$store.state.dataUrl+'/postings/delete/'+row.id).then(response => {
+        //update postingsData and originalPostingsData
+        this.removePostingFromResult(row);
         //notification
         this.$notify({
           group: 'alumniCarpoolNotification',
@@ -197,6 +222,12 @@ export default {
 
     },
 
+    removePostingFromResult(item){
+        this.postingsData.splice(this.postingsData.indexOf(item), 1);
+        this.originalPostingsData.splice(this.originalPostingsData.indexOf(item), 1);
+    },
+
+
     show(from, to, date){
       let url =  this.$store.state.dataUrl+'/postings/get/all?departureCity='+ from + '&arrivalCity='+to+'&departureDate='+date;
       const req = new XMLHttpRequest()
@@ -204,7 +235,7 @@ export default {
       req.onload = () => {
         const data = JSON.parse(req.response)
         this.postingsData = data
-        this.originalpostingsData = data.slice(0)
+        this.originalPostingsData = data.slice(0)
       }
       req.send()
     }
