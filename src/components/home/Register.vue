@@ -73,6 +73,8 @@ export default {
       email: '',
       password: '',
       currentRole: '',
+      rating: 0.0,
+      review: 0,
     }
 
   }),

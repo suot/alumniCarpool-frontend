@@ -308,7 +308,7 @@ export default {
       }
 
       //post to server
-      this.$http.post(this.$store.state.dataUrl+"/users/update", this.userData).then(response => {
+      this.$http.put(this.$store.state.dataUrl+"/users/update", this.userData).then(response => {
         //notification
         this.$notify({
           group: 'alumniCarpoolNotification',

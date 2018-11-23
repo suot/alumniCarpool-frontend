@@ -139,6 +139,9 @@ import 'flatpickr/dist/flatpickr.css';
 import 'flatpickr/dist/themes/material_blue.css';
 import InputTag from 'vue-input-tag';
 import swal from 'sweetalert2';
+import '@/vendor/libs/Animation.css';
+
+
 
 export default {
   name: 'ticket-list',
@@ -210,6 +213,13 @@ export default {
         let phone = driver.phone;
         let badges = "";
         let tags = driver.tags;
+        let htmlText = '<div>'+phone+'</div>';
+        let altMsg = 'Driver \'s avatar';
+        let roundedRating = Math.round( driver.rating * 10 ) / 10;
+
+        if(driver.rating > 0){
+            htmlText += '<div><font size="2">Rated '+ roundedRating +' on '+driver.review+' reviews</font></div>';
+        }
 
         for(let i in tags){
           badges += '<button class="d-inline-block mr-2" style="border-color: transparent; background: #26B4FF; color: #fff;">' + tags[i] + '</button>';
@@ -217,15 +227,14 @@ export default {
 
         swal({
             title: name,
-            text: phone,
+            html: htmlText,
             imageUrl: url,
-            // imageWidth: 400,
-            // imageHeight: 200,
-            imageAlt: 'Driver \'s avatar',
+            imageAlt: altMsg,
             showConfirmButton: false,
             footer: badges,
             buttonsStyling: false,
-            animation: true,
+            animation: false,
+            customClass: 'animated zoomIn'
         });
     },
 
@@ -279,7 +288,7 @@ export default {
           //modify order
           order.driver.car.seats[i].reserved = true;
           order.driver.car.seats[i].passenger = this.$store.state.userLoggedIn;
-          order.driver.car.seats[i].rated = false;
+          order.driver.car.seats[i].rating = 0;
 
           //post to server to update the order
           let url = this.$store.state.dataUrl+'/orders/update/'+ order.id;

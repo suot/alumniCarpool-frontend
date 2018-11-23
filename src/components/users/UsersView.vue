@@ -11,68 +11,61 @@
     </div>
 
     <b-card no-body>
-      <div class="row no-gutters row-bordered">
-        <div class="d-flex col-md align-items-center">
-          <a href="javascript:void(0)" class="card-body d-block text-dark">
-            <div class="text-muted small line-height-1">Rate</div>
-            <div class="text-xlarge" v-if="userData.rate">{{ userData.rate }}</div>
-            <!-- <div class="text-xlarge">{{formatInt(userData.rate)}}</div> -->
-          </a>
-        </div>
-      </div>
-
-      <!-- <hr class="border-light m-0"> -->
-
       <b-card-body>
-      <h6 class="mt-4 mb-3">Personal info</h6>
-        <table class="table user-view-table m-0">
-          <tbody>
-            <tr>
-              <td>First Name:</td>
-              <td v-if="userData.firstName">{{ userData.firstName }}</td>
-            </tr>
+          <h6 class="mt-4 mb-3">Personal info</h6>
+          <table class="table user-view-table m-0">
+            <tbody>
+              <tr>
+                <td>First Name:</td>
+                <td v-if="userData.firstName">{{ userData.firstName }}</td>
+              </tr>
+              <tr>
+                <td>Last Name:</td>
+                <td v-if="userData.lastName">{{ userData.lastName }}</td>
+              </tr>
+              <tr>
+                <td>Current Role:</td>
+                <td v-if="userData.currentRole">{{ userData.currentRole }}</td>
+              </tr>
+              <tr>
+                <td>Gender:</td>
+                <td v-if="userData.gender">{{userData.gender}}</td>
+              </tr>
+              <tr>
+                <td>Alma Mater:</td>
+                <td v-if="userData.almaMater">{{ userData.almaMater }}</td>
+              </tr>
+            </tbody>
+          </table>
 
-            <tr>
-              <td>Last Name:</td>
-              <td v-if="userData.lastName">{{ userData.lastName }}</td>
-            </tr>
+          <h6 class="mt-4 mb-3">Contacts</h6>
+          <table class="table user-view-table m-0">
+            <tbody>
+              <tr>
+                <td>E-mail:</td>
+                <td>{{ userData.email }}</td>
+              </tr>
 
-            <tr>
-              <td>Current Role:</td>
-              <td v-if="userData.currentRole">{{ userData.currentRole }}</td>
-            </tr>
+              <tr>
+                <td>Phone:</td>
+                <td v-if="userData.phone">{{ userData.phone }}</td>
+              </tr>
+            </tbody>
+          </table>
 
-            <tr>
-              <td>Gender:</td>
-              <td v-if="userData.gender">{{userData.gender}}</td>
-            </tr>
-
-            <tr>
-              <td>Alma Mater:</td>
-              <td v-if="userData.almaMater">{{ userData.almaMater }}</td>
-            </tr>
-
-            <tr>
-              <td>Preferences:</td>
-              <td v-if="userData.tags">{{ userData.tags.join(', ') }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <h6 class="mt-4 mb-3">Contacts</h6>
-        <table class="table user-view-table m-0">
-          <tbody>
-            <tr>
-              <td>E-mail:</td>
-              <td>{{ userData.email }}</td>
-            </tr>
-
-            <tr>
-              <td>Phone:</td>
-              <td v-if="userData.phone">{{ userData.phone }}</td>
-            </tr>
-          </tbody>
-        </table>
+          <h6 class="mt-4 mb-3">Others</h6>
+          <table class="table user-view-table m-0">
+            <tbody>
+              <tr  v-if="userData.currentRole==='Driver'">
+                <td>Rating:</td>
+                <td><star-rating :inline="true" :star-size="19" :show-rating="false" :increment="0.1" :rating="userData.rating" :read-only="true"></star-rating> {{ roundedRating() }} on {{userData.review}} reviews</td>
+              </tr>
+              <tr>
+                <td>Tags:</td>
+                <td v-if="userData.tags"><input-tag :read-only="true" v-model="userData.tags"></input-tag></td>
+              </tr>
+            </tbody>
+          </table>
       </b-card-body>
     </b-card>
   </div>
@@ -82,22 +75,29 @@
 <style src="@/vendor/styles/pages/users.scss" lang="scss"></style>
 
 <script>
-//import * as numeral from 'numeral'
+import StarRating from 'vue-star-rating'
+import InputTag from 'vue-input-tag'
+
 
 export default {
   name: 'user-view',
   metaInfo: {
     title: 'User view'
   },
+  components: {
+    StarRating,
+    InputTag
+  },
+
   computed: {
     userData: function () {
       return this.$store.state.userLoggedIn
-    }
+    },
   },
   methods: {
-    // formatInt (v) {
-    //   return numeral(v).format('0,0')
-    // }
+    roundedRating: function(){
+      return Math.round( this.$store.state.userLoggedIn.rating * 10 ) / 10;
+    }
   },
 }
 </script>
