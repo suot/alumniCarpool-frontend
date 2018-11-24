@@ -91,9 +91,13 @@ export default {
               this.$router.push('/tickets/list');
 
             }else{
-              //TODO:notification
+              this.$notify({
+                group: 'acNotification',
+                type: 'error',
+                title: 'Login',
+                text: 'Password is wrong!'
+              })
               console.log("Password is wrong!");
-
             }
           }
         }, response => {

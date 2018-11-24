@@ -5,7 +5,7 @@
       <div class="media-body ml-4">
         <h4 class="font-weight-bold mb-0"><span class="text-muted font-weight-normal">{{ userData.firstName }} {{ userData.lastName }}</span></h4>
         <router-link to="/users/account-settings"><b-btn variant="primary" size="sm">Edit</b-btn></router-link>&nbsp;
-        <router-link to="/users/chat"><b-btn variant="default" size="sm">Chat</b-btn></router-link>&nbsp;
+        <!-- <router-link to="/users/chat"><b-btn variant="default" size="sm">Chat</b-btn></router-link>&nbsp; -->
         <b-btn variant="default icon-btn" size="sm"><i class="ion ion-md-mail"></i></b-btn>
       </div>
     </div>

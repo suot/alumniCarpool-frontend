@@ -200,24 +200,21 @@ export default {
       this.$http.delete(this.$store.state.dataUrl+'/postings/delete/'+row.id).then(response => {
         //update postingsData and originalPostingsData
         this.removePostingFromResult(row);
-        //notification
-        this.$notify({
-          group: 'alumniCarpoolNotification',
-          type: 'success',
-          title: 'Posting-delete',
-          text: 'Posting is deleted successfully!'
-        })
+        this.$showNotification('acNotification', 'success', 'Posting-delete', 'Posting is deleted successfully!');
+
+        //send message
+        const message = {
+          type: "Notification_Warn_Posting",
+          msgContent: "You have deleted a posting: from " + row.departureLocation + ", " + row.departureCity + " to " + row.arrivalLocation + ", " + row.arrivalCity+" at " + row.departureTime+" " + row.departureDate,
+          time: new Date().toUTCString(),
+          unread: true
+        };
+        this.$sendMessage(this.$store.state.userLoggedIn, message);
 
         //delete the data in table
+        this.removePostingFromResult(row);
       }, response => {
-        //error callback, notification
-        this.$notify({
-          group: 'alumniCarpoolNotification',
-          type: 'error',
-          title: 'Posting-delete',
-          text: 'Posting is not deleted successfully!'
-        })
-
+        this.$showNotification('acNotification', 'error', 'Posting-delete', 'Posting is not deleted successfully!');
       });
 
     },
@@ -226,7 +223,6 @@ export default {
         this.postingsData.splice(this.postingsData.indexOf(item), 1);
         this.originalPostingsData.splice(this.originalPostingsData.indexOf(item), 1);
     },
-
 
     show(from, to, date){
       let url =  this.$store.state.dataUrl+'/postings/get/all?departureCity='+ from + '&arrivalCity='+to+'&departureDate='+date;

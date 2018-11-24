@@ -34,7 +34,7 @@
 
                   <md-card-content>
                       <md-avatar v-for="(seat,j) in order.driver.car.seats" :key="j" v-if="seat.reserved" class="mr-2">
-                          <img :src="getImage(seat.passenger.id, 'avatar')" alt="Avatar" @click.stop="showModal_avatar(seat.passenger, 'passenger')" :title="seat.position + ': ' + seat.passenger.firstName +' '+seat.passenger.lastName">
+                          <img :src="getImage(seat.passenger.id, 'avatar')" alt="Avatar" v-b-tooltip.hover @click.stop="showModal_avatar(seat.passenger, 'Passenger')" :title="seat.position + ': ' + seat.passenger.firstName +' '+seat.passenger.lastName">
                       </md-avatar>
                   </md-card-content>
               </md-card>
@@ -71,7 +71,7 @@
 
                     <md-card-header>
                         <md-avatar>
-                            <img :src="getImage(order.driver.id, 'avatar')" alt="Avatar" v-b-tooltip.hover :title="'Driver: ' + order.driver.firstName + ' ' + order.driver.lastName" @click.stop="showModal_avatar(order.driver, 'driver')">
+                            <img :src="getImage(order.driver.id, 'avatar')" alt="Avatar" v-b-tooltip.hover :title="'Driver: ' + order.driver.firstName + ' ' + order.driver.lastName" @click.stop="showModal_avatar(order.driver, 'Driver')">
                         </md-avatar>
                         <div class="md-subhead">Rate the driver:</div>
                         <!-- <div class="md-subhead">{{order.driver.firstName}} {{order.driver.lastName}}</div> -->
@@ -135,6 +135,10 @@ export default {
     }),
 
     methods: {
+      getImage(userId, imageName){
+        return this.$store.state.dataUrl + "\\images\\" + userId + "\\" + imageName + ".jpg";
+      },
+
       showModal_avatar(user, role){
           let url = this.getImage(user.id, 'avatar');
           let name = user.firstName + " " + user.lastName;
@@ -143,16 +147,17 @@ export default {
           let tags = user.tags;
           let htmlText = '<div>'+phone+'</div>';
           let altMsg = 'Passenger \'s avatar';
-          let roundedRating = Math.round( driver.rating * 10 ) / 10;
+
 
           for(let i in tags){
             badges += '<button class="d-inline-block mr-2" style="border-color: transparent; background: #26B4FF; color: #fff;">' + tags[i] + '</button>';
           }
 
-          if(role == "driver"){
+          if(role == "Driver"){
               altMsg = 'Driver \'s avatar';
               if(user.rating > 0){
-                  htmlText += '<div><font size="2">Rated '+ roundedRating +' on '+driver.review+' reviews</font></div>';
+                let roundedRating = Math.round( user.rating * 10 ) / 10;
+                htmlText += '<div><font size="2">Rated '+ roundedRating +' on '+user.review+' reviews</font></div>';
               }
           }
 
@@ -170,12 +175,7 @@ export default {
       },
 
       setDuplicateRating: function(){
-          this.$notify({
-            group: 'alumniCarpoolNotification',
-            type: 'warn',
-            title: 'Ticket-my finished tickets',
-            text: 'You have rated this seat. Do not rate it again!'
-          })
+          this.$showNotification('acNotification', 'warn', 'Ticket-my finished tickets', 'You have rated this seat. Do not rate it again!');
       },
 
       getCurrentRating(order){
@@ -199,13 +199,10 @@ export default {
 
       setRating: function(rating, order) {
           const user = this.$store.state.userLoggedIn;
-
           let seats = order.driver.car.seats;
 
           for(let i=0; i < seats.length; i++){
               if(seats[i].passenger != null){
-
-
                   if(seats[i].passenger.id == user.id){
                       if(seats[i].rating == 0){
                           //modify in the order
@@ -228,59 +225,57 @@ export default {
                                   //post modified driver to user table
                                   let url3 = this.$store.state.dataUrl+"/users/update";
                                   this.$http.put(url3, driver).then(response => {
-                                      this.$notify({
-                                          group: 'alumniCarpoolNotification',
-                                          type: 'success',
-                                          title: 'Ticket-my finished tickets',
-                                          text: 'Seat is rated successfully!'
-                                      })
+                                      this.$showNotification('acNotification', 'success', 'Ticket-my finished tickets', 'Seat is rated successfully!');
+
+                                      const msgTypeToDriver = "Message";
+                                      const msgToDriver = "Thank you driver. I have made the rating on you!";
+                                      const msgTypeToPassenger = "Notification_Success_Ticket";
+                                      const msgToPassenger = "Thank you passenger. Your rating to the driver is valuable to others.";
+                                      this.sendMessageToAll(order, user, msgTypeToDriver, msgToDriver, msgTypeToPassenger, msgToPassenger);
+
                                   }, response => {
-                                      //error callback, notification
-                                      this.$notify({
-                                        group: 'alumniCarpoolNotification',
-                                        type: 'error',
-                                        title: 'Ticket-my finished tickets',
-                                        text: 'Error occurred when rating driver!'
-                                      })
+                                      this.$showNotification('acNotification', 'error', 'Ticket-my finished tickets', 'Error occurred when rating driver!');
                                   });
                               }, response => {
-                                  //error callback, notification
-                                  this.$notify({
-                                    group: 'alumniCarpoolNotification',
-                                    type: 'error',
-                                    title: 'Ticket-my finished tickets',
-                                    text: 'Error occurred when retrieving driver!'
-                                  })
+                                  this.$showNotification('acNotification', 'error', 'Ticket-my finished tickets', 'Error occurred when retrieving driver!');
                               });
                           }, response => {
-                              //error callback, notification
-                              this.$notify({
-                                group: 'alumniCarpoolNotification',
-                                type: 'error',
-                                title: 'Ticket-my finished tickets',
-                                text: 'Error occurred when updating order with seat \'s rating!'
-                              })
+                              this.$showNotification('acNotification', 'error', 'Ticket-my finished tickets', 'Error occurred when updating order with seat \'s rating!');
                           });
                       }else{
-                          this.$notify({
-                            group: 'alumniCarpoolNotification',
-                            type: 'warn',
-                            title: 'Ticket-my finished tickets',
-                            text: 'Additional rating to this seat is ignored!'
-                          })
+                          this.$showNotification('acNotification', 'warn', 'Ticket-my finished tickets', 'Additional rating to this seat is ignored!');
                       }
                   }else{
                       continue;
                   }
               }else{
-
                   continue;
               }
           }
       },
 
-      getImage(driverId, imageName){
-        return this.$store.state.dataUrl + "\\images\\" + driverId + "\\" + imageName + ".jpg";
+      sendMessageToAll(row, passenger, msgTypeToDriver, msgToDriver, msgTypeToPassenger, msgToPassenger){
+        const ticketInfo = "Ticket information: from " + row.departureLocation + ", " + row.departureCity + " to " + row.arrivalLocation + ", " + row.arrivalCity+" at " + row.departureTime+" " + row.departureDate;
+
+        let now = new Date().toUTCString();
+        let message_driver = {
+          type: msgTypeToDriver,
+          msgContent: msgToDriver + " " + ticketInfo,
+          time: now,
+          unread: true,
+          sender: passenger
+        };
+        //send message to the driver
+        this.$sendMessage(row.driver, message_driver);
+
+        //send message to all passengers
+        let message_passenger = {
+          type: msgTypeToPassenger,
+          msgContent: msgToPassenger + " " + ticketInfo,
+          time: now,
+          unread: true
+        };
+        this.$sendMessage(passenger, message_passenger);
       },
 
       getReservedSeat(order){
@@ -293,8 +288,6 @@ export default {
           }
         }
       }
-
-
     },
 
 
@@ -307,15 +300,8 @@ export default {
                 //set to slides_passenger
                 const orders = response.body;
                 this.slides_passenger = orders;
-
             }, response => {
-                //error callback, notification
-                this.$notify({
-                  group: 'alumniCarpoolNotification',
-                  type: 'error',
-                  title: 'Ticket-my finished tickets',
-                  text: 'Error occurred when fetching my finished tickets!'
-                })
+                this.$showNotification('acNotification', 'error', 'Ticket-my finished tickets', 'Error occurred when fetching my finished tickets!');
             });
         }else{
           this.currentRole = "Driver";
@@ -324,15 +310,8 @@ export default {
               //set results to slides_driver
               const orders = response.body;
               this.slides_driver = orders;
-
           }, response => {
-              //error callback, notification
-              this.$notify({
-                group: 'alumniCarpoolNotification',
-                type: 'error',
-                title: 'Ticket-my finished tickets',
-                text: 'Error occurred when fetching my finished tickets!'
-              })
+              this.$showNotification('acNotification', 'error', 'Ticket-my finished tickets', 'Error occurred when fetching my finished tickets!');
           });
         }
     },

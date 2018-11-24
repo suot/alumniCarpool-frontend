@@ -101,26 +101,23 @@ export default {
       this.order.driver = this.$store.state.userLoggedIn;
 
       this.$http.post(this.$store.state.dataUrl+'/orders/create', this.order).then(response => {
-        //notification
-        this.$notify({
-          group: 'alumniCarpoolNotification',
-          type: 'success',
-          title: 'Ticket-create',
-          text: 'Ticket is created successfully!'
-        });
-        //redirect
-        this.$router.push('/tickets/list');
-      }, response => {
-        // error callback, notification
-        this.$notify({
-          group: 'alumniCarpoolNotification',
-          type: 'error',
-          title: 'Ticket-create',
-          text: 'Ticket is not created successfully!'
-        });
-      });
-    }
+        this.$showNotification('acNotification', 'success', 'Ticket-create', 'Ticket is created successfully!');
 
+        //send message
+        const order = this.order;
+        const msgToDriver = "You have created a ticket: from " + order.departureLocation + ", " + order.departureCity + " to " + order.arrivalLocation + ", " + order.arrivalCity+" at " + order.departureTime+" " + order.departureDate;
+        const message = {
+          type: "Notification_Success_Ticket",
+          msgContent: msgToDriver,
+          time: new Date().toUTCString(),
+          unread: true
+        };
+        this.$sendMessage(this.$store.state.userLoggedIn, message);
+        this.$router.push('/tickets/list'); //redirect to ticketsList page
+      }, response => {
+        this.$showNotification('acNotification', 'error', 'Ticket-create', 'Ticket is not created successfully!');
+      });
+    },
   }
 }
 </script>

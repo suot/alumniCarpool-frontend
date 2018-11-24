@@ -9,158 +9,82 @@
       <span class="app-brand-text demo font-weight-normal ml-2">Alumni Carpool</span>
     </b-navbar-brand>
 
-    <!-- Sidenav toggle (see demo.css) -->
-    <b-navbar-nav class="layout-sidenav-toggle d-lg-none align-items-lg-center mr-auto" v-if="sidenavToggle">
-      <a class="nav-item nav-link px-0 mr-lg-4" href="javascript:void(0)" @click="toggleSidenav">
-        <i class="ion ion-md-menu text-large align-middle" />
-      </a>
-    </b-navbar-nav>
 
-    <b-navbar-toggle target="app-layout-navbar"></b-navbar-toggle>
+
+
+
 
     <b-collapse is-nav id="app-layout-navbar">
-      <!-- Divider -->
-      <hr class="d-lg-none w-100 my-2">
-
-      <b-navbar-nav class="align-items-lg-center">
-        <!-- Search -->
-        <label class="nav-item navbar-text navbar-search-box p-0 active">
-          <i class="ion ion-ios-search navbar-icon align-middle"></i>
-          <span class="navbar-search-input pl-2">
-            <input type="text" class="form-control navbar-text mx-2" placeholder="Search..." style="width:200px">
-          </span>
-        </label>
-      </b-navbar-nav>
-
       <b-navbar-nav class="align-items-lg-center ml-auto">
         <b-nav-item-dropdown no-caret :right="!isRTL" class="demo-navbar-notifications mr-lg-3">
           <template slot="button-content">
             <i class="ion ion-md-notifications-outline navbar-icon align-middle"></i>
-            <span class="badge badge-primary badge-dot indicator"></span>
+            <span v-if="new_notifications.length > 0" class="badge badge-primary badge-dot indicator"></span>
             <span class="d-lg-none align-middle">&nbsp; Notifications</span>
           </template>
 
           <div class="bg-primary text-center text-white font-weight-bold p-3">
-            4 New Notifications
+            {{ new_notifications.length }} New Notifications
           </div>
           <b-list-group flush>
-            <b-list-group-item href="javascript:void(0)" class="media d-flex align-items-center">
+            <b-list-group-item v-for="(new_notification, i) in new_notifications" :key="i" href="javascript:void(0)" @click.stop="showModal_avatar_notification(new_notification)" class="media d-flex align-items-center">
               <div class="ui-icon ui-icon-sm ion ion-md-home bg-secondary border-0 text-white"></div>
               <div class="media-body line-height-condenced ml-3">
-                <div class="text-dark">Login from 192.168.1.1</div>
+                <div class="text-dark">{{new_notification.message.msgContent.slice(0, 35)}}... </div>
                 <div class="text-light small mt-1">
-                  Aliquam ex eros, imperdiet vulputate hendrerit et.
-                </div>
-                <div class="text-light small mt-1">12h ago</div>
-              </div>
-            </b-list-group-item>
-
-            <b-list-group-item href="javascript:void(0)" class="media d-flex align-items-center">
-              <div class="ui-icon ui-icon-sm ion ion-md-person-add bg-info border-0 text-white"></div>
-              <div class="media-body line-height-condenced ml-3">
-                <div class="text-dark">You have <strong>4</strong> new followers</div>
-                <div class="text-light small mt-1">
-                  Phasellus nunc nisl, posuere cursus pretium nec, dictum vehicula tellus.
-                </div>
-              </div>
-            </b-list-group-item>
-
-            <b-list-group-item href="javascript:void(0)" class="media d-flex align-items-center">
-              <div class="ui-icon ui-icon-sm ion ion-md-power bg-danger border-0 text-white"></div>
-              <div class="media-body line-height-condenced ml-3">
-                <div class="text-dark">Server restarted</div>
-                <div class="text-light small mt-1">
-                  19h ago
-                </div>
-              </div>
-            </b-list-group-item>
-
-            <b-list-group-item href="javascript:void(0)" class="media d-flex align-items-center">
-              <div class="ui-icon ui-icon-sm ion ion-md-warning bg-warning border-0 text-dark"></div>
-              <div class="media-body line-height-condenced ml-3">
-                <div class="text-dark">99% server load</div>
-                <div class="text-light small mt-1">
-                  Etiam nec fringilla magna. Donec mi metus.
-                </div>
-                <div class="text-light small mt-1">
-                  20h ago
+                  {{ new_notification.message.time.slice(0, 10)}} {{ new_notification.message.time.slice(11, 16) }}
                 </div>
               </div>
             </b-list-group-item>
           </b-list-group>
-
           <a href="javascript:void(0)" class="d-block text-center text-light small p-2 my-1">Show all notifications</a>
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown no-caret :right="!isRTL" class="demo-navbar-messages mr-lg-3">
           <template slot="button-content">
             <i class="ion ion-ios-mail navbar-icon align-middle"></i>
-            <span class="badge badge-primary badge-dot indicator"></span>
+            <span v-if="new_messages.length > 0" class="badge badge-primary badge-dot indicator"></span>
             <span class="d-lg-none align-middle">&nbsp; Messages</span>
           </template>
 
           <div class="bg-primary text-center text-white font-weight-bold p-3">
-            4 New Messages
+            {{ new_messages.length }} New Messages
           </div>
+
           <b-list-group flush>
-            <b-list-group-item href="javascript:void(0)" class="media d-flex align-items-center">
-              <img :src="`${baseUrl}img/avatars/6-small.png`" class="d-block ui-w-40 rounded-circle" alt>
+
+            <b-list-group-item v-for="(new_message, i) in new_messages" :key="i" href="javascript:void(0)" @click.stop="showModal_avatar_message(new_message.message.sender, new_message)" class="media d-flex align-items-center">
+              <img :src="getImage(new_message.message.sender.id, 'avatar')" class="d-block ui-w-40 rounded-circle" alt>
               <div class="media-body ml-3">
-                <div class="text-dark line-height-condenced">Sit meis deleniti eu, pri vidit meliore docendi ut.</div>
+                <div class="text-dark line-height-condenced">{{new_message.message.msgContent.slice(0, 35)}}... </div>
                 <div class="text-light small mt-1">
-                  Mae Gibson &nbsp;·&nbsp; 58m ago
+                  {{ new_message.message.sender.firstName}} {{ new_message.message.sender.lastName}} &nbsp;·&nbsp; {{ new_message.message.time.slice(0, 10)}} {{ new_message.message.time.slice(11, 16) }}
                 </div>
               </div>
             </b-list-group-item>
 
-            <b-list-group-item href="javascript:void(0)" class="media d-flex align-items-center">
-              <img :src="`${baseUrl}img/avatars/4-small.png`" class="d-block ui-w-40 rounded-circle" alt>
-              <div class="media-body ml-3">
-                <div class="text-dark line-height-condenced">Mea et legere fuisset, ius amet purto luptatum te.</div>
-                <div class="text-light small mt-1">
-                  Kenneth Frazier &nbsp;·&nbsp; 1h ago
-                </div>
-              </div>
-            </b-list-group-item>
-
-            <b-list-group-item href="javascript:void(0)" class="media d-flex align-items-center">
-              <img :src="`${baseUrl}img/avatars/5-small.png`" class="d-block ui-w-40 rounded-circle" alt>
-              <div class="media-body ml-3">
-                <div class="text-dark line-height-condenced">Sit meis deleniti eu, pri vidit meliore docendi ut.</div>
-                <div class="text-light small mt-1">
-                  Nelle Maxwell &nbsp;·&nbsp; 2h ago
-                </div>
-              </div>
-            </b-list-group-item>
-
-            <b-list-group-item href="javascript:void(0)" class="media d-flex align-items-center">
-              <img :src="`${baseUrl}img/avatars/11-small.png`" class="d-block ui-w-40 rounded-circle" alt>
-              <div class="media-body ml-3">
-                <div class="text-dark line-height-condenced">Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.</div>
-                <div class="text-light small mt-1">
-                  Belle Ross &nbsp;·&nbsp; 5h ago
-                </div>
-              </div>
-            </b-list-group-item>
           </b-list-group>
-
           <a href="javascript:void(0)" class="d-block text-center text-light small p-2 my-1">Show all messages</a>
         </b-nav-item-dropdown>
 
+
+
+
+
+
         <!-- Divider -->
         <div class="nav-item d-none d-lg-block text-big font-weight-light line-height-1 opacity-25 mr-3 ml-1">|</div>
-
         <b-nav-item-dropdown :right="!isRTL" class="demo-navbar-user">
           <template slot="button-content">
             <span class="d-inline-flex flex-lg-row-reverse align-items-center align-middle">
               <img :src="remoteAvatar" alt class="d-block ui-w-30 rounded-circle">
-              <span class="px-1 mr-lg-2 ml-2 ml-lg-0">{{ userData.firstName }}</span>
+              <span class="px-1 mr-lg-2 ml-2 ml-lg-0">{{ userData.firstName }} {{ userData.lastName }}</span>
             </span>
           </template>
 
-          <b-dd-item><router-link to="/users/view"><i class="ion ion-ios-person text-lightest"></i> &nbsp; My profile</router-link></b-dd-item>
-          <b-dd-item><router-link to="/tickets/my-finished-tickets"><i class="lnr lnr-database text-lightest"></i> &nbsp; My finished orders</router-link></b-dd-item>
-          <b-dd-item><router-link to="/users/account-settings"><i class="ion ion-md-settings text-lightest"></i> &nbsp; Account settings</router-link></b-dd-item>
+          <b-dd-item><router-link to="/users/view"><i class="ion ion-ios-person"></i> &nbsp; My profile</router-link></b-dd-item>
+          <b-dd-item><router-link to="/users/account-settings"><i class="ion ion-md-settings"></i> &nbsp; Account settings</router-link></b-dd-item>
+          <b-dd-item><router-link to="/tickets/my-finished-tickets"><i class="lnr lnr-database"></i> &nbsp; My finished orders</router-link></b-dd-item>
           <b-dd-divider />
           <b-dd-item @click="checkOut()"><i class="ion ion-ios-log-out text-danger"></i> &nbsp; Log Out</b-dd-item>
         </b-nav-item-dropdown>
@@ -170,15 +94,20 @@
 </template>
 
 <script>
+import swal from 'sweetalert2';
+import '@/vendor/libs/Animation.css';
+
 export default {
   name: 'app-layout-navbar',
 
-  props: {
-    sidenavToggle: {
-      type: Boolean,
-      default: true
-    }
+  components: {
+    swal,
   },
+
+  data: () => ({
+    new_notifications: [],
+    new_messages: [],
+  }),
 
   computed: {
     userData: function () {
@@ -190,9 +119,77 @@ export default {
   },
 
   methods: {
-    toggleSidenav () {
-      this.layoutHelpers.toggleCollapsed()
+    getImage(userId, imageName){
+      return this.$store.state.dataUrl + "\\images\\" + userId + "\\" + imageName + ".jpg";
     },
+
+    showModal_avatar_message(sender, new_message){
+      let url = this.getImage(sender.id, 'avatar');
+      let name = sender.firstName + " " + sender.lastName;
+      let phone = sender.phone;
+      let badges = "";
+      let tags = sender.tags;
+      let htmlText = '<div>'+phone+'</div>';
+      let altMsg = 'User \'s avatar';
+
+
+      for(let i in tags){
+        badges += '<button class="d-inline-block mr-2" style="border-color: transparent; background: #26B4FF; color: #fff;">' + tags[i] + '</button>';
+      }
+
+      htmlText += '<div><font size="2">'+ new_message.message.msgContent +'</font></div>';
+
+      swal({
+          title: name,
+          html: htmlText,
+          imageUrl: url,
+          imageAlt: altMsg,
+          showConfirmButton: false,
+          footer: badges,
+          buttonsStyling: false,
+          animation: false,
+          customClass: 'animated zoomIn'
+      });
+
+
+      //remove from user.messages
+      this.userData.messages.splice(new_message.id, 1);
+      this.$http.put(this.$store.state.dataUrl+"/users/update", this.userData).then(response => {
+        //remove from new_messages
+        this.new_messages.splice(this.new_messages.indexOf(new_message), 1);
+
+      }, response => {
+        this.$showNotification('acNotification', 'error', 'Message-send message', 'Error occurred when updating user!');
+      });
+    },
+
+    showModal_avatar_notification(new_notification){
+      let url = "@/assets/logo.jpg";
+      let htmlText = '<div><font size="2">'+ new_notification.message.msgContent +'</font></div>';
+      let altMsg = 'System\'s logo';
+
+      swal({
+          html: htmlText,
+          imageUrl: url,
+          imageAlt: altMsg,
+          showConfirmButton: false,
+          buttonsStyling: false,
+          animation: false,
+          customClass: 'animated zoomIn'
+      });
+
+
+      //remove from user.messages
+      this.userData.messages.splice(new_notification.id, 1);
+      this.$http.put(this.$store.state.dataUrl+"/users/update", this.userData).then(response => {
+        //remove from new_messages
+        this.new_notifications.splice(this.new_notifications.indexOf(new_notification), 1);
+
+      }, response => {
+        this.$showNotification('acNotification', 'error', 'Message-send message', 'Error occurred when updating user!');
+      });
+    },
+
 
     getLayoutNavbarBg () {
       return this.layoutNavbarBg
@@ -203,6 +200,32 @@ export default {
       this.$store.commit('update_userLoggedIn', null);
       this.$router.push('/logout');
     },
-  }
+  },
+
+  mounted () {
+    const user = this.$store.state.userLoggedIn;
+    let messageStack = user.messages;
+    if(messageStack != null){
+      for(let i=0; i<messageStack.length; i++){
+        let message = messageStack[i];
+        if(message.unread){
+          let new_message = {
+            id: i,
+            message: message
+          };
+
+          let type = message.type;
+          if(type=="Message"){
+            this.new_messages.push(new_message);
+          }else{
+            this.new_notifications.push(new_message);
+          }
+        }else{
+          continue;
+        }
+      }
+    }
+  },
+
 }
 </script>

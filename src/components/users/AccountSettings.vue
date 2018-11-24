@@ -311,7 +311,7 @@ export default {
       this.$http.put(this.$store.state.dataUrl+"/users/update", this.userData).then(response => {
         //notification
         this.$notify({
-          group: 'alumniCarpoolNotification',
+          group: 'acNotification',
           type: 'success',
           title: 'User-update',
           text: 'User profile is updated successfully. Please log in again to see your changes!'
@@ -321,7 +321,7 @@ export default {
       }, response => {
         // error callback, notification
         this.$notify({
-          group: 'alumniCarpoolNotification',
+          group: 'acNotification',
           type: 'error',
           title: 'User-update',
           text: 'User profile is not updated successfully!'
@@ -365,7 +365,7 @@ export default {
 
         //notification
         this.$notify({
-          group: 'alumniCarpoolNotification',
+          group: 'acNotification',
           type: 'success',
           title: 'Upload-avatar',
           text: 'Avatar is uploaded successfully!'
@@ -374,7 +374,7 @@ export default {
       }, response => {
         // error callback, notification
         this.$notify({
-          group: 'alumniCarpoolNotification',
+          group: 'acNotification',
           type: 'error',
           title: 'Upload-avatar',
           text: 'Avatar is not uploaded successfully!'
@@ -413,7 +413,7 @@ export default {
 
         //notification
         this.$notify({
-          group: 'alumniCarpoolNotification',
+          group: 'acNotification',
           type: 'success',
           title: 'Upload-car',
           text: 'Car is uploaded successfully!'
@@ -422,7 +422,7 @@ export default {
       }, response => {
         // error callback, notification
         this.$notify({
-          group: 'alumniCarpoolNotification',
+          group: 'acNotification',
           type: 'error',
           title: 'Upload-car',
           text: 'Car is not uploaded successfully!'
@@ -460,7 +460,7 @@ export default {
 
         //notification
         this.$notify({
-          group: 'alumniCarpoolNotification',
+          group: 'acNotification',
           type: 'success',
           title: 'Upload-certificate',
           text: 'Certificate is uploaded successfully!'
@@ -469,7 +469,7 @@ export default {
       }, response => {
         // error callback, notification
         this.$notify({
-          group: 'alumniCarpoolNotification',
+          group: 'acNotification',
           type: 'error',
           title: 'Upload-certificate',
           text: 'Certificate is not uploaded successfully!'

@@ -24,6 +24,7 @@ Vue.use(Vuex)
 Vue.use(Notifications, { velocity })
 
 
+
 const store = new Vuex.Store({
   state: {
     isLoggedIn: false,
@@ -53,11 +54,49 @@ router.beforeEach((to, from, next) => {
 
 
 
-
-// Global RTL flag
 Vue.mixin({
-  data: globals
+  data: globals,
+
+  computed:{
+    $getImage(userId, imageName){
+      return this.$store.state.dataUrl + "\\images\\" + userId + "\\" + imageName + ".jpg";
+    },
+  },
+
+  methods: {
+    $sendMessage(user, message){
+      this.$http.get(this.$store.state.dataUrl+"/users/get/"+user.id).then(response => {
+        let receiver = response.body;
+
+        if(receiver.messages == null){
+          receiver.messages = [];
+        }
+        receiver.messages.push(message);
+        this.$http.put(this.$store.state.dataUrl+"/users/update", receiver).then(response => {
+
+        }, response => {
+          this.$showNotification('acNotification', 'warn', 'Message-send message', 'Message is not sent successfully!');
+        });
+
+      }, response => {
+        this.$showNotification('acNotification', 'error', 'Message-send message', 'Error occurred when getting user informaiton!');
+      });
+    },
+
+    $showNotification(group, type, title, text){
+      this.$notify({
+        group: group,
+        type: type,
+        title: title,
+        text: text
+      });
+    },
+
+
+  }
 })
+
+
 
 new Vue({
   store,

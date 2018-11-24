@@ -215,10 +215,10 @@ export default {
         let tags = driver.tags;
         let htmlText = '<div>'+phone+'</div>';
         let altMsg = 'Driver \'s avatar';
-        let roundedRating = Math.round( driver.rating * 10 ) / 10;
 
         if(driver.rating > 0){
-            htmlText += '<div><font size="2">Rated '+ roundedRating +' on '+driver.review+' reviews</font></div>';
+          let roundedRating = Math.round( driver.rating * 10 ) / 10;
+          htmlText += '<div><font size="2">Rated '+ roundedRating +' on '+driver.review+' reviews</font></div>';
         }
 
         for(let i in tags){
@@ -249,7 +249,8 @@ export default {
             // imageHeight: 200,
             imageAlt: 'Driver \'s car',
             showConfirmButton: false,
-            animation: true,
+            animation: false,
+            customClass: 'animated zoomIn'
         });
     },
 
@@ -264,7 +265,8 @@ export default {
           // imageHeight: 200,
           imageAlt: 'Driver \'s certificate',
           showConfirmButton: false,
-          animation: true,
+          animation: false,
+          customClass: 'animated zoomIn'
       });
     },
 
@@ -293,73 +295,32 @@ export default {
           //post to server to update the order
           let url = this.$store.state.dataUrl+'/orders/update/'+ order.id;
           this.$http.put(url, order).then(response => {
-              //notification
-              this.$notify({
-                group: 'alumniCarpoolNotification',
-                type: 'success',
-                title: 'Seat-reserve',
-                text: 'Seat is reserved successfully!'
-              })
-              //redirect
-              //this.$router.push('/tickets/list');
+              this.$showNotification('acNotification', 'success', 'Seat-reserve', 'Seat is reserved successfully!');
           }, response => {
-              //error callback, notification
-              this.$notify({
-                group: 'alumniCarpoolNotification',
-                type: 'error',
-                title: 'Seat-reserve',
-                text: 'Seat is not reserved successfully!'
-              })
+              this.$showNotification('acNotification', 'error', 'Seat-reserve', 'Seat is not reserved successfully!');
           });
         }
         else{
-            this.$notify({
-              group: 'alumniCarpoolNotification',
-              type: 'error',
-              title: 'Seat-reserve',
-              text: 'Seat in On-board status does not accept reservation!'
-            })
+            this.$showNotification('acNotification', 'error', 'Seat-reserve', 'Seat in On-board status does not accept reservation!');
         }
     },
 
     releaseSeat(order, i){
       if(order.driver.car.seats[i].passenger.id == this.$store.state.userLoggedIn.id && order.status == "Boarding"){
           order.driver.car.seats[i].reserved = !order.driver.car.seats[i].reserved;
-          //post to server to remove a passenger from the seat
-
-          //modify order
           order.driver.car.seats[i].reserved = null;
           order.driver.car.seats[i].passenger = null;
-          order.driver.car.seats[i].rated = null;
+          order.driver.car.seats[i].rating = null;
 
           //post to server to update the order
           let url = this.$store.state.dataUrl+'/orders/update/'+ order.id;
           this.$http.put(url, order).then(response => {
-            //notification
-            this.$notify({
-              group: 'alumniCarpoolNotification',
-              type: 'success',
-              title: 'Seat-cancel reservation',
-              text: 'Seat reservation is cancelled successfully!'
-            })
-            //redirect
-            //this.$router.push('/tickets/list');
+            this.$showNotification('acNotification', 'success', 'Seat-cancel reserve', 'Seat reservation is cancelled successfully!');
           }, response => {
-            //error callback, notification
-            this.$notify({
-              group: 'alumniCarpoolNotification',
-              type: 'error',
-              title: 'Seat-cancel reservation',
-              text: 'Seat reservation is not cancelled successfully!'
-            })
+            this.$showNotification('acNotification', 'error', 'Seat-cancel reserve', 'Seat reservation is not cancelled successfully!');
           });
         }else{
-            this.$notify({
-              group: 'alumniCarpoolNotification',
-              type: 'error',
-              title: 'Seat-cancel reservation',
-              text: 'You do not have right to cancel this reservation!'
-            })
+            this.$showNotification('acNotification', 'error', 'Seat-cancel reserve', 'You do not have right to cancel this reservation!');
         }
     },
 
@@ -371,24 +332,53 @@ export default {
         row.status = "On-board";
         let url = this.$store.state.dataUrl+'/orders/update/'+ row.id;
         this.$http.put(url, row).then(response => {
-            //notification
-            this.$notify({
-              group: 'alumniCarpoolNotification',
-              type: 'success',
-              title: 'Ticket-change',
-              text: 'Have a nice journey!'
-            })
-            //redirect
-            //this.$router.push('/tickets/list');
+            this.$showNotification('acNotification', 'success', 'Ticket-change', 'Have a nice journey!');
+
+            //send message to driver and all passengers
+            const msgTypeToDriver = "Notification_Success_Ticket";
+            const msgToDriver = "You have changed the order\'s status from Boarding to On-board. Please pick up all passengers on time.";
+            const msgTypeToPassenger = "Message";
+            const msgToPassenger = "Ticket is authenticated. I will pick you up on time.";
+            this.sendMessageToAll(row, msgTypeToDriver, msgToDriver, msgTypeToPassenger, msgToPassenger);
+
         }, response => {
-            //error callback, notification
-            this.$notify({
-              group: 'alumniCarpoolNotification',
-              type: 'error',
-              title: 'Ticket-change',
-              text: 'Error occurred when changing ticket\'s status!'
-            })
+            this.$showNotification('acNotification', 'error', 'Ticket-change', 'Error occurred when changing ticket\'s status!');
         });
+    },
+
+    sendMessageToAll(row, msgTypeToDriver, msgToDriver, msgTypeToPassenger, msgToPassenger){
+      const ticketInfo = "Ticket information: from " + row.departureLocation + ", " + row.departureCity + " to " + row.arrivalLocation + ", " + row.arrivalCity+" at " + row.departureTime+" " + row.departureDate;
+      let now = new Date().toUTCString();
+      let message_driver = {
+        type: msgTypeToDriver,
+        msgContent: msgToDriver + " " + ticketInfo,
+        time: now,
+        unread: true
+      };
+      //send message to the driver
+      this.$sendMessage(row.driver, message_driver);
+
+      //send message to all passengers
+      let message_passenger = {
+        type: msgTypeToPassenger,
+        msgContent: msgToPassenger + " " + ticketInfo,
+        time: now,
+        unread: true,
+        sender: row.driver
+      };
+
+      console.log("start journey");
+      console.log(message_passenger);
+
+      let seats = row.driver.car.seats;
+      for(let i=0; i<seats.length; i++){
+        let passenger = seats[i].passenger;
+        if(passenger != null && passenger.id != null){
+          this.$sendMessage(passenger, message_passenger);
+        }else{
+          continue;
+        }
+      }
     },
 
     finishJourney(row){
@@ -398,29 +388,19 @@ export default {
             this.$http.put(url, row).then(response => {
               //update ticketsData and originalTicketsData
               this.removeOrderFromResult(row);
-              //notification
-              this.$notify({
-                group: 'alumniCarpoolNotification',
-                type: 'success',
-                title: 'Ticket-change',
-                text: 'Order is finished!'
-              })
+              this.$showNotification('acNotification', 'success', 'Ticket-change', 'Journey is finished!');
+
+              const msgTypeToDriver = "Notification_Success_Ticket";
+              const msgToDriver = "Good job driver. You have finished the journey.";
+              const msgTypeToPassenger = "Message";
+              const msgToPassenger = "Thank you. Our journey is finished. You can rate me through your finished orders.";
+              this.sendMessageToAll(row, msgTypeToDriver, msgToDriver, msgTypeToPassenger, msgToPassenger);
+
             }, response => {
-              //error callback, notification
-              this.$notify({
-                group: 'alumniCarpoolNotification',
-                type: 'error',
-                title: 'Ticket-change',
-                text: 'Error occurred when changing ticket\'s status!'
-              })
+              this.$showNotification('acNotification', 'error', 'Ticket-change', 'Error occurred when changing ticket\'s status!');
             });
         }else{
-            this.$notify({
-              group: 'alumniCarpoolNotification',
-              type: 'error',
-              title: 'Ticket-change',
-              text: 'Boarding order can not be changed directly to finished!'
-            })
+            this.$showNotification('acNotification', 'error', 'Ticket-change', 'Boarding order can not be changed directly to finished!');
         }
     },
 
@@ -428,24 +408,18 @@ export default {
       this.$http.delete(this.$store.state.dataUrl+'/orders/delete/'+row.id).then(response => {
         //update ticketsData and originalTicketsData
         this.removeOrderFromResult(row);
-        //notification
-        this.$notify({
-          group: 'alumniCarpoolNotification',
-          type: 'warn',
-          title: 'Ticket-delete',
-          text: 'Ticket is deleted successfully!'
-        })
-        //delete the data in table
-      }, response => {
-        //error callback, notification
-        this.$notify({
-          group: 'alumniCarpoolNotification',
-          type: 'error',
-          title: 'Ticket-delete',
-          text: 'Ticket is not deleted successfully!'
-        })
-      });
+        this.$showNotification('acNotification', 'warn', 'Ticket-delete', 'Ticket is deleted successfully!');
 
+        //send message to driver and all passengers
+        const msgTypeToDriver = "Notification_Warn_Ticket";
+        const msgToDriver = "You have cancelled the journey. We understand your inconvenience, but please explore more to passengers.";
+        const msgTypeToPassenger = "Message";
+        const msgToPassenger = "I am sorry that I have cancelled the journey.";
+        this.sendMessageToAll(row, msgTypeToDriver, msgToDriver, msgTypeToPassenger, msgToPassenger);
+
+      }, response => {
+        this.$showNotification('acNotification', 'error', 'Ticket-delete', 'Ticket is not deleted successfully!');
+      });
     },
 
     removeOrderFromResult(item){

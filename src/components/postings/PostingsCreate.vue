@@ -97,27 +97,43 @@ export default {
   methods: {
     createPosting(){
       this.posting.creator = this.$store.state.userLoggedIn;
-      this.$http.post(this.$store.state.dataUrl+"/postings/create", this.posting).then(response => {
-        //notification
-        this.$notify({
-          group: 'alumniCarpoolNotification',
-          type: 'success',
-          title: 'Posting-create',
-          text: 'Posting is created successfully!'
-        })
+
+      const url = this.$store.state.dataUrl+"/postings/create";
+      const data = this.posting;
+      this.$http.post(url, data).then(response => {
+        this.$showNotification('acNotification', 'success', 'Posting-create', 'Posting is created successfully!');
+        //send message
+        const message = {
+          type: "Notification_Success_Posting",
+          msgContent: "You have created a posting: from " + this.posting.departureLocation + ", " + this.posting.departureCity + " to " + this.posting.arrivalLocation + ", " + this.posting.arrivalCity+" at " + this.posting.departureTime+" " + this.posting.departureDate,
+          time: this.posting.creatingTime,
+          unread: true
+        };
+        this.sendMessage(this.$store.state.userLoggedIn, message);
         //redirect
         this.$router.push('/postings/list');
       }, response => {
-        // error callback, notification
-        this.$notify({
-          group: 'alumniCarpoolNotification',
-          type: 'error',
-          title: 'Posting-create',
-          text: 'Posting is not created successfully!'
-        })
+        this.$showNotification('acNotification', 'error', 'Posting-create', 'Posting is not created successfully!');
       });
-    }
+    },
 
+    sendMessage(user, message){
+      this.$http.get(this.$store.state.dataUrl+"/users/get/"+user.id).then(response => {
+        let receiver = response.body;
+
+        if(receiver.messages == null){
+          receiver.messages = [];
+        }
+        receiver.messages.push(message);
+        this.$http.put(this.$store.state.dataUrl+"/users/update", receiver).then(response => {
+
+        }, response => {
+          this.$showNotification('acNotification', 'warn', 'Message-send message', 'System notification is not sent successfully!');
+        });
+      }, response => {
+        this.$showNotification('acNotification', 'error', 'Message-send message', 'Error occurred when getting user informaiton!');
+      });
+    },
   }
 }
 </script>

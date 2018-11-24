@@ -75,6 +75,7 @@ export default {
       currentRole: '',
       rating: 0.0,
       review: 0,
+      messages: [],
     }
 
   }),
@@ -82,13 +83,24 @@ export default {
     createUser(){
       this.$http.post(this.$store.state.dataUrl+"/users/create", this.user).then(
         response => {
-          //notification
+          this.$notify({
+            group: 'acNotification',
+            type: 'success',
+            title: 'Register',
+            text: 'User is created successfully!'
+          })
 
           console.log("user is created");
           //redirect
           this.$router.push('/login');
         }, response => {
-        // error callback, notification
+          this.$notify({
+            group: 'acNotification',
+            type: 'error',
+            title: 'Register',
+            text: 'User is not created successfully!'
+          })
+
           console.log("user creation fails");
       });
     }
