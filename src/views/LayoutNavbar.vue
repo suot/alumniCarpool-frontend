@@ -10,10 +10,6 @@
     </b-navbar-brand>
 
 
-
-
-
-
     <b-collapse is-nav id="app-layout-navbar">
       <b-navbar-nav class="align-items-lg-center ml-auto">
         <b-nav-item-dropdown no-caret :right="!isRTL" class="demo-navbar-notifications mr-lg-3">
@@ -66,10 +62,6 @@
           </b-list-group>
           <a href="javascript:void(0)" class="d-block text-center text-light small p-2 my-1">Show all messages</a>
         </b-nav-item-dropdown>
-
-
-
-
 
 
         <!-- Divider -->
@@ -164,7 +156,7 @@ export default {
     },
 
     showModal_avatar_notification(new_notification){
-      let url = "@/assets/logo.jpg";
+      let url = this.baseUrl+"img/ac.jpg";
       let htmlText = '<div><font size="2">'+ new_notification.message.msgContent +'</font></div>';
       let altMsg = 'System\'s logo';
 

@@ -29,7 +29,8 @@ const store = new Vuex.Store({
   state: {
     isLoggedIn: false,
     userLoggedIn: null,
-    dataUrl: 'http://localhost:1010'
+    dataUrl: 'http://alumnicarpool.wejjtwdrt9.us-west-2.elasticbeanstalk.com'
+    // dataUrl: 'http://localhost:1010'
   },
   mutations: {
     update_isLoggedIn (state, newValue) { state.isLoggedIn = newValue; },

@@ -1,0 +1,32 @@
+{
+	"providers": {
+		"awscloudformation": {
+			"AuthRoleName": "alumniarpool-20181125001137-authRole",
+			"UnauthRoleArn": "arn:aws:iam::555016773459:role/alumniarpool-20181125001137-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::555016773459:role/alumniarpool-20181125001137-authRole",
+			"Region": "us-east-1",
+			"DeploymentBucketName": "alumniarpool-20181125001137-deployment",
+			"UnauthRoleName": "alumniarpool-20181125001137-unauthRole",
+			"StackName": "alumniarpool-20181125001137",
+			"StackId": "arn:aws:cloudformation:us-east-1:555016773459:stack/alumniarpool-20181125001137/95ba5460-f070-11e8-b1b2-500c2854b699"
+		}
+	},
+	"hosting": {
+		"S3AndCloudFront": {
+			"service": "S3AndCloudFront",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/alumniarpool-20181125001137-deployment/amplify-cfn-templates/hosting/template.json",
+				"logicalId": "hostingS3AndCloudFront"
+			},
+			"lastPushTimeStamp": "2018-11-25T05:14:49.669Z",
+			"output": {
+				"S3BucketSecureURL": "https://alumniarpool-20181125001315--hostingbucket.s3.amazonaws.com",
+				"WebsiteURL": "http://alumniarpool-20181125001315--hostingbucket.s3-website-us-east-1.amazonaws.com",
+				"Region": "us-east-1",
+				"HostingBucketName": "alumniarpool-20181125001315--hostingbucket"
+			},
+			"lastPushDirHash": "eA5vbzocDfH9quk6qEuYz+RFauk="
+		}
+	}
+}

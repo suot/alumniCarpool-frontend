@@ -5,7 +5,6 @@ import MainPage from './views/MainPage.vue'
 
 Vue.use(Router)
 
-
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,

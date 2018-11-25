@@ -12,7 +12,7 @@
             <b-list-group-item button :active="curTab === 'general'" @click="curTab = 'general'">General</b-list-group-item>
             <!-- <b-list-group-item button :active="curTab === 'password'" @click="curTab = 'password'">Change password</b-list-group-item> -->
             <b-list-group-item button :active="curTab === 'info'" @click="curTab = 'info'">Info</b-list-group-item>
-            <b-list-group-item button :active="curTab === 'car'" @click="curTab = 'car'">Car Info</b-list-group-item>
+            <b-list-group-item button :active="curTab === 'car'" @click="curTab = 'car'" v-if="userData.currentRole === 'Driver'">Car Info</b-list-group-item>
           </b-list-group>
         </div>
 
@@ -166,7 +166,7 @@
           </b-card-body>
         </div>
 
-        <div class="col-md-9" v-if="curTab === 'car'">
+        <div class="col-md-9" v-if="curTab === 'car' && userData.currentRole === 'Driver'">
           <b-card-body class="pb-2">
             <b-form-group label="Plate Number">
               <b-input v-model="userData.car.plateNum" />

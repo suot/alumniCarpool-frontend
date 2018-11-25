@@ -1,22 +1,14 @@
 <template>
   <div class="authentication-wrapper authentication-2 ui-bg-cover ui-bg-overlay-container px-4" :style="`background-image: url('${baseUrl}img/login.jpg');`">
-    <div class="ui-bg-overlay bg-dark opacity-25"></div>
+    <!-- <div class="ui-bg-overlay bg-dark opacity-25"></div> -->
 
     <div class="authentication-inner py-5">
 
       <b-card no-body>
         <div class="p-4 p-sm-5">
-          <!-- Logo -->
-          <div class="d-flex justify-content-center align-items-center pb-2 mb-4">
-            <div class="ui-w-60">
-              <div class="w-100 position-relative" style="padding-bottom: 54%">
-                <svg class="w-100 h-100 position-absolute" viewBox="0 0 148 80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="a" x1="46.49" x2="62.46" y1="53.39" y2="48.2" gradientUnits="userSpaceOnUse"><stop stop-opacity=".25" offset="0"></stop><stop stop-opacity=".1" offset=".3"></stop><stop stop-opacity="0" offset=".9"></stop></linearGradient><linearGradient id="e" x1="76.9" x2="92.64" y1="26.38" y2="31.49" xlink:href="#a"></linearGradient><linearGradient id="d" x1="107.12" x2="122.74" y1="53.41" y2="48.33" xlink:href="#a"></linearGradient></defs><path class="fill-primary" transform="translate(-.1)" d="M121.36,0,104.42,45.08,88.71,3.28A5.09,5.09,0,0,0,83.93,0H64.27A5.09,5.09,0,0,0,59.5,3.28L43.79,45.08,26.85,0H.1L29.43,76.74A5.09,5.09,0,0,0,34.19,80H53.39a5.09,5.09,0,0,0,4.77-3.26L74.1,35l16,41.74A5.09,5.09,0,0,0,94.82,80h18.95a5.09,5.09,0,0,0,4.76-3.24L148.1,0Z"></path><path transform="translate(-.1)" d="M52.19,22.73l-8.4,22.35L56.51,78.94a5,5,0,0,0,1.64-2.19l7.34-19.2Z" fill="url(#a)"></path><path transform="translate(-.1)" d="M95.73,22l-7-18.69a5,5,0,0,0-1.64-2.21L74.1,35l8.33,21.79Z" fill="url(#e)"></path><path transform="translate(-.1)" d="M112.73,23l-8.31,22.12,12.66,33.7a5,5,0,0,0,1.45-2l7.3-18.93Z" fill="url(#d)"></path></svg>
-              </div>
-            </div>
+          <div class="d-flex justify-content-center align-items-center pb-2 mb-2">
+              <img src="@/assets/ac.jpg" alt class="d-block ui-w-80 rounded-circle">
           </div>
-          <!-- / Logo -->
-
-          <h5 class="text-center text-muted font-weight-normal mb-4">Login to Your Account</h5>
 
           <!-- Form -->
           <form>
@@ -67,47 +59,35 @@ export default {
     }
 
   }),
+
+
   methods: {
     checkCredentials(){
-      let url = this.$store.state.dataUrl + "/users/get?email="+this.credentials.email;
+      let url = this.$store.state.dataUrl + "/users/get?email="+this.credentials.email+"&password="+this.credentials.password;
 
       this.$http.get(url).then(
         response => {
           const user = response.body;
-          if(user == null){
-            console.log("User does not exist!");
+          if(user == null || user.id == null){
+            this.$showNotification('acNotification', 'error', 'Login', 'User does not exist!');
           }else{
             //TODO: Get token from Java Spring OAuth2
-
             //TODO: Vuex.store to store token
-
-            if(this.credentials.password == user.password){
+            if(user.password == ""){
+              this.$showNotification('acNotification', 'error', 'Login', 'Password is wrong!');
+            }else{
               //console.log("before: " + this.$store.state.isLoggedIn);
               this.$store.commit('update_isLoggedIn', true);
               //console.log("after: " + this.$store.state.isLoggedIn);
               this.$store.commit('update_userLoggedIn', user);
-
               //redirect
               this.$router.push('/tickets/list');
-
-            }else{
-              this.$notify({
-                group: 'acNotification',
-                type: 'error',
-                title: 'Login',
-                text: 'Password is wrong!'
-              })
-              console.log("Password is wrong!");
             }
           }
         }, response => {
-        // error callback, notification
-          console.log("User does not exist!");
+          this.$showNotification('acNotification', 'error', 'Login', 'Can not connect to the server!');
         }
       );
-
-
-
     }
   }
 }

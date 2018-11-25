@@ -1,0 +1,20 @@
+{
+    "projectName": "alumniCarpool",
+    "projectPath": "C:\\UWindsor\\workspace\\vue\\alumniCarpool-Frontend",
+    "defaultEditor": "atom",
+    "frontendHandler": {
+        "javascript": "C:\\Users\\tians\\AppData\\Roaming\\npm\\node_modules\\@aws-amplify\\cli\\node_modules\\amplify-frontend-javascript"
+    },
+    "javascript": {
+        "framework": "vue",
+        "config": {
+            "SourceDir": "src",
+            "DistributionDir": "dist",
+            "BuildCommand": "npm.cmd run-script build",
+            "StartCommand": "npm.cmd run-script serve"
+        }
+    },
+    "providers": {
+        "awscloudformation": "C:\\Users\\tians\\AppData\\Roaming\\npm\\node_modules\\@aws-amplify\\cli\\node_modules\\amplify-provider-awscloudformation"
+    }
+}

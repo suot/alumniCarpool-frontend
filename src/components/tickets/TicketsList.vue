@@ -284,29 +284,33 @@ export default {
     },
 
     reserveSeat(order, i){
-      if(order.status == "Boarding"){
-          //change the reserved status in order to change icon
-          order.driver.car.seats[i].reserved = !order.driver.car.seats[i].reserved;
-          //modify order
-          order.driver.car.seats[i].reserved = true;
-          order.driver.car.seats[i].passenger = this.$store.state.userLoggedIn;
-          order.driver.car.seats[i].rating = 0;
+      if(this.$store.state.userLoggedIn.currentRole=="Passenger"){
+        if(order.status == "Boarding"){
+            //change the reserved status in order to change icon
+            order.driver.car.seats[i].reserved = !order.driver.car.seats[i].reserved;
+            //modify order
+            order.driver.car.seats[i].reserved = true;
+            order.driver.car.seats[i].passenger = this.$store.state.userLoggedIn;
+            order.driver.car.seats[i].rating = 0;
 
-          //post to server to update the order
-          let url = this.$store.state.dataUrl+'/orders/update/'+ order.id;
-          this.$http.put(url, order).then(response => {
-              this.$showNotification('acNotification', 'success', 'Seat-reserve', 'Seat is reserved successfully!');
-          }, response => {
-              this.$showNotification('acNotification', 'error', 'Seat-reserve', 'Seat is not reserved successfully!');
-          });
-        }
-        else{
-            this.$showNotification('acNotification', 'error', 'Seat-reserve', 'Seat in On-board status does not accept reservation!');
+            //post to server to update the order
+            let url = this.$store.state.dataUrl+'/orders/update/'+ order.id;
+            this.$http.put(url, order).then(response => {
+                this.$showNotification('acNotification', 'success', 'Seat-reserve', 'Seat is reserved successfully!');
+            }, response => {
+                this.$showNotification('acNotification', 'error', 'Seat-reserve', 'Seat is not reserved successfully!');
+            });
+          }
+          else{
+              this.$showNotification('acNotification', 'error', 'Seat-reserve', 'Seat in On-board status does not accept reservation!');
+          }
+        }else{
+          this.$showNotification('acNotification', 'error', 'Seat-reserve', 'You do not have right to make this reservation!');
         }
     },
 
     releaseSeat(order, i){
-      if(order.driver.car.seats[i].passenger.id == this.$store.state.userLoggedIn.id && order.status == "Boarding"){
+      if(order.driver.car.seats[i].passenger.id == this.$store.state.userLoggedIn.id && order.status == "Boarding" && this.$store.state.userLoggedIn.currentRole=="Passenger"){
           order.driver.car.seats[i].reserved = !order.driver.car.seats[i].reserved;
           order.driver.car.seats[i].reserved = null;
           order.driver.car.seats[i].passenger = null;
