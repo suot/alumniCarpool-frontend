@@ -27,10 +27,10 @@ Vue.use(Notifications, { velocity })
 
 const store = new Vuex.Store({
   state: {
+    //dataUrl: 'http://alumnicarpool.wejjtwdrt9.us-west-2.elasticbeanstalk.com',
+    dataUrl: 'http://54.149.172.228:1010',
     isLoggedIn: false,
-    userLoggedIn: null,
-    dataUrl: 'http://alumnicarpool.wejjtwdrt9.us-west-2.elasticbeanstalk.com'
-    // dataUrl: 'http://localhost:1010'
+    userLoggedIn: null,    
   },
   mutations: {
     update_isLoggedIn (state, newValue) { state.isLoggedIn = newValue; },
