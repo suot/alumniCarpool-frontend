@@ -4,7 +4,7 @@ AlumniCarpool is a single-page-components Vue application like Uber; Driver coul
 ## Demo
 Click on the thumbnail to play the demo on Youtube
 
-[![Click to play on Youtube](https://img.youtube.com/vi/RbdHTSxbPLo&t=5s/0.jpg)](https://www.youtube.com/watch?v=RbdHTSxbPLo&t=5s)
+[![Click to play on Youtube](https://img.youtube.com/vi/RbdHTSxbPLo/0.jpg)](https://www.youtube.com/watch?v=RbdHTSxbPLo)
 
 ## Architecture
 
@@ -109,11 +109,18 @@ Run in intelliJ via the embedded tomcat in Spring boot project, or generate a wa
 <img src="readmeImage/24.png">
 
 ## Lessons learnt from this project
-	MongoDB, as a kind of Nosql Database, is convenient to use and maintain. No sql data table is needed, and no CRUD statements are needed when operating the DAO tier in backend code.
-	The way to generate token/session to avoid csrf (Cross-site request forgery) attack is always challenging. In spring boot security, csrf is opened by default, therefore token is required in http request headers. Otherwise, only Http get is supported. To use the post, put, and delete requests, you have to disable the csrf swift (not recommended, but easy to go at the beginning of a project) or request with token.
-	To allow cross origin, just include the annotation @CrossOrigin in controllers for simplification.
-	When using BCrypt to hash/match password, write the @bean in security file and @Autowired the PasswordEncoder in service or controller file. Do not add duplicate BCryptPasswordEncoder beans in service files, otherwise exception may occur, saying “encode does not like BCrypt…”
-	Vue is cool and easy to learn for basic usage, while single-page component is a more common way in bigger projects and it always involves longer study or preparation to start.
-	Vue Router is an easy way of routing and Vuex is a tool for global state control or global methods definition.
-	AWS Elastic Beanstalk is an easy way for deploying web applications with war or zip package. While AWS Amplify, together with S3, supports Angular/Vue/React much better. Do not use AWS Lightsails. It is a remote virtual machine, but the speed to operate on it is too slow to tolerant when you use the free trial. Use EC2 instead.
-	Testing is important in every stage. Even you have fixed all reported bugs in the final development stage, you may find bugs after deploying the app in cloud.
+1. MongoDB, as a kind of Nosql Database, is convenient to use and maintain. No sql data table is needed, and no CRUD statements are needed when operating the DAO tier in backend code.
+
+2. The way to generate token/session to avoid csrf (Cross-site request forgery) attack is always challenging. In spring boot security, csrf is opened by default, therefore token is required in http request headers. Otherwise, only Http get is supported. To use the post, put, and delete requests, you have to disable the csrf swift (not recommended, but easy to go at the beginning of a project) or request with token.
+
+3. To allow cross origin, just include the annotation @CrossOrigin in controllers for simplification.
+
+4. When using BCrypt to hash/match password, write the @bean in security file and @Autowired the PasswordEncoder in service or controller file. Do not add duplicate BCryptPasswordEncoder beans in service files, otherwise exception may occur, saying “encode does not like BCrypt…”
+
+5. Vue is cool and easy to learn for basic usage, while single-page component is a more common way in bigger projects and it always involves longer study or preparation to start.
+
+6. Vue Router is an easy way of routing and Vuex is a tool for global state control or global methods definition.
+
+7. AWS Elastic Beanstalk is an easy way for deploying web applications with war or zip package. While AWS Amplify, together with S3, supports Angular/Vue/React much better. Do not use AWS Lightsails. It is a remote virtual machine, but the speed to operate on it is too slow to tolerant when you use the free trial. Use EC2 instead.
+
+8. Testing is important in every stage. Even you have fixed all reported bugs in the final development stage, you may find bugs after deploying the app in cloud.
