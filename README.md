@@ -13,53 +13,53 @@ Click on the thumbnail to play the demo on Youtube
 ## User manual
 Step 1: Sign up, sign in, and update personal profile through “Account settings”. You may upload your avatar, input your seat preference via tags, or upload your alumni certificate.
 
-<img src="readmeImage/2.png">
-<img src="readmeImage/3.png">
-<img src="readmeImage/4.png">
+<img src="readmeImage/2.png" height="70%" width="70%">
+<img src="readmeImage/3.png" height="70%" width="70%">
+<img src="readmeImage/4.png" height="60%" width="60%">
 
 If you sign up as a driver, you can see a “Car Info” tab where you can upload your car photo and customize the seat information which will present in orders later.
 
-<img src="readmeImage/5.png">
+<img src="readmeImage/5.png" height="70%" width="70%">
 
 Step 2: Drivers create tickets (orders)
 
-<img src="readmeImage/6.png">
+<img src="readmeImage/6.png" height="90%" width="90%">
 
 Step 3: Passengers view created tickets and filter them out by departure city, arrival city, and departure date. All fitting tickets will be listed in a data table, which supports pagination, reordering, and search. Clicking on any avatar triggers a model showing an amplified picture of that avatar. Put the mouse on the reserved seat you can see who has reserved it or on a vacant seat presented as a hollow icon you can see the position. Click on that hollow icon to reserve the seat and make the icon changed to a filled one. Click on your reserved seat to cancel your reservation from that order and meantime toggle the icon to a hollow one. You can see the appropriate other tooltips and notifications as well.
 
-<img src="readmeImage/7.png">
-<img src="readmeImage/8.png">
-<img src="readmeImage/9.png">
-<img src="readmeImage/10.png">
+<img src="readmeImage/7.png" height="90%" width="90%">
+<img src="readmeImage/8.png" height="60%" width="60%">
+<img src="readmeImage/9.png" height="90%" width="90%">
+<img src="readmeImage/10.png" height="90%" width="90%">
 
 Step 4: Sign in as a driver and filter orders you can see your created order with reserved seats, as well as an operation column. You cannot operate orders created by other drivers. When every seat is reserved, you may want to click on the hollow plane icon to start the journey. At the same time, the order status is changed from original Boarding to On-board, and every passenger in that order will receive a notification from you. When every passenger arrives their destination, you may change the order to Finished by clicking on the filled plane icon, and subsequently the order disappears from the order list. We do not cover a payment module in our application, so do that thing offline.
 
-<img src="readmeImage/11.png">
+<img src="readmeImage/11.png" height="90%" width="90%">
 
 Step 5: Log in as a passenger you can see the notifications from drivers. Clicking on a message to see its details in a popup model. When you read that message and go back to click on the envelop icon again, you can see the count of the new messages is deducted by 1.
 
-<img src="readmeImage/12.png">
+<img src="readmeImage/12.png" height="50%" width="50%">
 
 Clicking on “My finished orders” opens a swiper slider where you can find a previous order and rate the driver. A tooltip on the driver’s or the co-passenger’s avatar can help recall their information.
 
-<img src="readmeImage/13.png">
+<img src="readmeImage/13.png" height="80%" width="80%">
 
 Step 6: Log in as a driver, you can see the notifications from the system and from the passengers.
 
-<img src="readmeImage/14.png">
+<img src="readmeImage/14.png" height="80%" width="80%">
 
 Click on “My profile” to review your current overall rating based on all your passengers.
 
-<img src="readmeImage/15.png">
+<img src="readmeImage/15.png" height="80%" width="80%">
 
 Click on “My finished orders” to view your previous orders. As a driver, you cannot rate yourself while you see information of all your passengers.
 
-<img src="readmeImage/16.png">
+<img src="readmeImage/16.png" height="80%" width="80%">
 
 Step 7: As a passenger, you can also create a posting indicating your departure and destination to let the driver call you offline. You will delete your posting when you are picked up by a driver or when you want to change your schedule.
 
-<img src="readmeImage/17.png">
-<img src="readmeImage/18.png">
+<img src="readmeImage/17.png" height="80%" width="80%">
+<img src="readmeImage/18.png" height="90%" width="90%">
 
 ## Deployment:
 Change the dataUrl in the main.js file to deploy the application locally or on AWS EC2.
@@ -102,7 +102,7 @@ Run in intelliJ via the embedded tomcat in Spring boot project, or generate a wa
 
 5.	Routers in frontend: when refreshing a webpage or accessing a URL without authentication, the user will be redirected to the login page, which is done by the router security in Vue.
 
-<img src="readmeImage/23.png">
+<img src="readmeImage/23.png" height="70%" width="70%">
 
 6.	Global states’ tracing using Vuex and Mixin:
 
