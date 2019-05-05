@@ -65,7 +65,7 @@ Step 7: As a passenger, you can also create a posting indicating your departure 
 Change the dataUrl in the main.js file to deploy the application locally or on AWS EC2.
 Step 1: frontend server
 ```
-Git clone https://github.com/hongshuidang/alumniCarpool_frontend.git
+Git clone https://github.com/hongshuidang/alumniCarpool-frontend.git
 ```
 ```
 npm install
@@ -79,7 +79,7 @@ npm run serve
 
 Step 2: backend server
 ```
-Git clone https://github.com/hongshuidang/alumniCarpool_backend.git
+Git clone https://github.com/hongshuidang/alumniCarpool-backend.git
 ```
 Run in intelliJ via the embedded tomcat in Spring boot project, or generate a war package and put it into provided tomcat server.
 
